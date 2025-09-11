@@ -18,5 +18,5 @@ IMPORTANTE: Por favor, não façam nada na branch main, sempre criem suas branch
 e avisem sempre quais pastas estão mexendo para não ouverem conflitos. Sempre quando atualizarmos a branch main, atualizem
 suas branchs para que não ocorra outros conflitos. 
 
-
+(terei de mudar coisas no banco de dados pq fiz algumas cagadas.)
 
