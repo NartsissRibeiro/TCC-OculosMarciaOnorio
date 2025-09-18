@@ -225,4 +225,3 @@ document.getElementById('cep').addEventListener('blur', function() {
     }
 });
 <?php include "../partials/footer.php" ?>
-        //echo "<div class='d-flex justify-content-end mt-3'><a href='./pedido.php' class='btn'>Fazer Pedido</a></div>";
