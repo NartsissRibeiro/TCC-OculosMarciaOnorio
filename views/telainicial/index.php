@@ -52,5 +52,10 @@
             <button type="submit" class="btn">Adicionar ao Carrinho</button>
         </div>
     </form>
+    </div>
+            <?php
+        }
+        ?>
+    </div>
 </section>
    <?php include '../partials/footer.php' ?>
