@@ -13,19 +13,6 @@
         </section>
     </div>
 
-<section class="about" id="about">
-    <h2 class="title">Sobre <span>Nós</span></h2>
-    <div class="row">
-        <div class="container-image">
-            <img src="../../assets/img/fototia.jpeg" alt="sobre-nos" width="400" height="440"> <!-- Reduzido -->
-        </div>
-        <div class="content">
-            <h3>O QUE FAZEM NOSSOS ÓCULOS ESPECIAIS?</h3>
-            <p>Os óculos escuros Márcia Onório são a perfeita combinação de elegância, inovação e qualidade superior, refletindo a essência do estilo único e a paixão por cada detalhe.</p>
-            <a href="#" class="btn">Saiba mais</a>
-        </div>
-    </div>
-</section>
 <section class="menu" id="menu">
     <h2 class="title">Nossos <span>Produtos</span></h2>
     <div class="box-container">
@@ -56,6 +43,19 @@
             <?php
         }
         ?>
+    </div>
+</section>
+<section class="about" id="about">
+    <h2 class="title">Sobre <span>Nós</span></h2>
+    <div class="row">
+        <div class="container-image">
+            <img src="../../assets/img/fototia.jpeg" alt="sobre-nos" width="400" height="440"> <!-- Reduzido -->
+        </div>
+        <div class="content">
+            <h3>O QUE FAZEM NOSSOS ÓCULOS ESPECIAIS?</h3>
+            <p>Os óculos escuros Márcia Onório são a perfeita combinação de elegância, inovação e qualidade superior, refletindo a essência do estilo único e a paixão por cada detalhe.</p>
+            <a href="#" class="btn">Saiba mais</a>
+        </div>
     </div>
 </section>
    <?php include '../partials/footer.php' ?>

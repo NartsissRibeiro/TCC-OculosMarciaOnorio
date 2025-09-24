@@ -1,12 +1,11 @@
 <?php
-require __DIR__ . '/../vendor/autoload.php'; // Autoload do Composer
+require __DIR__ . '/../vendor/autoload.php'; 
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
 class MailController {
     public static function sendMail($to, $subject, $body) {
-        // Carregar o arquivo de configuração
         $config = require __DIR__ . '/../config.php';
 
         // Criar o objeto PHPMailer

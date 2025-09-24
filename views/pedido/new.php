@@ -1,108 +1,273 @@
-<!doctype html>
-<html lang="pt-br">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Márcia Onorio</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
-    <link rel="stylesheet" href="../../assets/css/style.css">
-  </head>
-  <body>
+<?php
+include "../partials/header.php";
+include "../partials/navbar.php";
+include "../../db/conexao.php";
 
-<div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="confirmModalLabel">Confirme seu Pedido</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <p><strong>Total:</strong> <span id="modalTotal"></span></p>
-        <p><strong>CEP:</strong> <span id="modalCEP"></span></p>
-        <p><strong>Número:</strong> <span id="modalNumero"></span></p>
-        <p class="text-capitalize"><strong>Forma de Pagamento:</strong> <span id="modalPagamento"></span></p>
-        <p><strong>Mensagem Especial:</strong> <span id="modalMensagem"></span></p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-        <button type="submit" class="btn btn-success" form="pedidoForm">Confirmar Pedido</button>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- Script Modal -->
-<script>
-document.getElementById('finalizarPedido').addEventListener('click', function () {
-    const total = parseFloat(document.querySelector("input[name='total']").value).toFixed(2);
-    let cep = document.querySelector("input[name='cep']").value.trim();
-    const numero = document.querySelector("input[name='numero']").value.trim();
-    const pagamento = document.querySelector("select[name='pagamento']").value.trim();
-    let mensagem = document.querySelector("textarea[name='mensagem']").value.trim();
+// Verifica login
+if (!SessionController::isLoggedIn()) {
+    echo "<div class='alert alert-danger'>Você precisa fazer login para finalizar o pedido. <a href='../usuario/index.php' class='btn btn-sm btn-warning ms-2'>Fazer Login</a></div>";
+    include "../partials/footer.php";
+    exit;
+}
+$userId = SessionController::getUserId();
+$stmt = $conexao->prepare("SELECT 
+                            cr.id_carrinho, 
+                            cr.qtd_carrinho,
+                            p.id_produto,
+                            p.imagem_produto, 
+                            p.nome_produto, 
+                            p.preco_produto, 
+                            m.nome_material, 
+                            c.nome_cor
+                        FROM carrinho cr
+                        INNER JOIN produto p ON cr.id_produto = p.id_produto
+                        LEFT JOIN material m ON p.id_material = m.id_material
+                        LEFT JOIN cor c ON p.id_cor = c.id_cor
+                        WHERE cr.id_user = ?");
+$stmt->bind_param("i", $userId);
+$stmt->execute();
+$result = $stmt->get_result();
 
-    // Validação: CEP, número e forma de pagamento devem estar preenchidos
-    if (!cep || !numero || !pagamento) {
-        alert("Por favor, preencha todos os campos obrigatórios: CEP, Número e Forma de Pagamento.");
-        return; // Não abre o modal
-    }
+if (mysqli_num_rows($result) === 0) {
+    echo "<div class='alert alert-warning'>Seu carrinho está vazio.</div>";
+    include "../partials/footer.php";
+    exit;
+}
 
-    // Formatação do CEP (xxxxx-xxx)
-    if (!cep.includes('-') && cep.length === 8) {
-        cep = cep.slice(0, 5) + '-' + cep.slice(5);
-    }
+// Calcula total
+$total = 0;
+$produtosCarrinho = [];
+while ($row = mysqli_fetch_assoc($result)) {
+    $total += $row['preco_produto'] * $row['qtd_carrinho'];
+    $produtosCarrinho[] = $row;
+}
 
-    // Capitalização da mensagem
-    mensagem = mensagem.charAt(0).toUpperCase() + mensagem.slice(1) || 'Nenhuma mensagem.';
-
-    // Atualiza os valores no modal
-    document.getElementById('modalTotal').innerText = `R$ ${total.replace('.', ',')}`;
-    document.getElementById('modalCEP').innerText = cep;
-    document.getElementById('modalNumero').innerText = numero;
-    document.getElementById('modalPagamento').innerText = pagamento;
-    document.getElementById('modalMensagem').innerText = mensagem;
-
-    // Abre o modal via JavaScript
-    const modal = new bootstrap.Modal(document.getElementById('confirmModal'));
-    modal.show();
-});
-</script>
+mysqli_close($conexao);
 ?>
 
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header text-center">
+            <h2>Finalizar Pedido</h2>
+        </div>
+        <div class="card-body">
 
+            <!-- Lista de produtos -->
+            <h5>Produtos no Pedido:</h5>
+            <ul class="list-group mb-3">
+                <?php foreach ($produtosCarrinho as $item): ?>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <?php echo ucwords(htmlspecialchars($item['nome_produto'])); ?> 
+                        x <?php echo $item['qtd_carrinho']; ?>
+                        <span>R$ <?php echo number_format($item['preco_produto'] * $item['qtd_carrinho'], 2, ',', '.'); ?></span>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
 
-<!-- Script API -->
+            <h4>Total: R$ <?php echo number_format($total, 2, ',', '.'); ?></h4>
 
+            <!-- Formulário de entrega -->
+            <form id="finalizarForm" action="../../controller/carrinho/pedido.php" method="POST" novalidate>
+                <input type="hidden" name="total" value="<?php echo number_format($total, 2, '.', ''); ?>">
+
+                <?php 
+                // Envia também os IDs e quantidades dos produtos
+                foreach ($produtosCarrinho as $item): ?>
+                    <input type="hidden" name="produtos[<?php echo $item['id_produto']; ?>]" value="<?php echo $item['qtd_carrinho']; ?>">
+                <?php endforeach; ?>
+
+               <form id="finalizarForm" action="../../controller/carrinho/pedido.php" method="POST" novalidate>
+                <div class="row g-3">
+                    <!-- CEP -->
+                    <div class="col-md-4">
+                        <label for="cep" class="form-label">CEP *</label>
+                        <input type="text" id="cep" name="cep" class="form-control" placeholder="Ex: 01001-000 ou 01001000" required>
+                    </div>
+
+                    <!-- Rua / Logradouro -->
+                    <div class="col-md-8">
+                        <label for="rua" class="form-label">Rua *</label>
+                        <input type="text" id="rua" name="rua" class="form-control text-capitalize" readonly required>
+                    </div>
+
+                    <!-- Bairro -->
+                    <div class="col-md-4">
+                        <label for="bairro" class="form-label">Bairro *</label>
+                        <input type="text" id="bairro" name="bairro" class="form-control text-capitalize" readonly required>
+                    </div>
+
+                    <!-- Cidade -->
+                    <div class="col-md-4">
+                        <label for="cidade" class="form-label">Cidade *</label>
+                        <input type="text" id="cidade" name="cidade" class="form-control text-capitalize" readonly required>
+                    </div>
+
+                    <!-- Estado -->
+                    <div class="col-md-4">
+                        <label for="estado" class="form-label">Estado *</label>
+                        <input type="text" id="estado" name="estado" class="form-control text-uppercase" readonly required>
+                    </div>
+
+                    <!-- Número -->
+                    <div class="col-md-3">
+                        <label for="numero" class="form-label">Número *</label>
+                        <input type="text" id="numero" name="numero" class="form-control" required>
+                    </div>
+
+                    <!-- Complemento -->
+                    <div class="col-md-9">
+                        <label for="complemento" class="form-label">Complemento</label>
+                        <input type="text" id="complemento" name="complemento" class="form-control text-capitalize" placeholder="Opcional">
+                    </div>
+
+                    <!-- Mensagem -->
+                    <div class="col-12">
+                        <label for="mensagem" class="form-label">Mensagem (opcional)</label>
+                        <textarea id="mensagem" name="mensagem" class="form-control" maxlength="250" rows="2" placeholder="Deixe uma mensagem para o pedido"></textarea>
+                    </div>
+
+                    <!-- Pagamento -->
+                    <div class="col-md-6">
+                        <label for="pagamento" class="form-label">Forma de Pagamento *</label>
+                        <select id="pagamento" name="pagamento" class="form-select" required>
+                            <option value="" selected disabled>Selecione</option>
+                            <option value="debito">Débito</option>
+                            <option value="credito">Crédito</option>
+                            <option value="pix">Pix</option>
+                            <option value="dinheiro">Dinheiro</option>
+                        </select>
+                    </div>
+
+                    <!-- Total (escondido) -->
+                    <input type="hidden" name="total" value="<?php echo number_format($total, 2, '.', ''); ?>">
+
+                    <!-- Botões -->
+                    <div class="col-12 d-flex justify-content-between align-items-center mt-3">
+                        <a href="../carrinho/index.php" class="btn btn-secondary">Voltar ao Carrinho</a>
+                        <button type="submit" class="btn btn-success" id="btnEnviar">Confirmar Pedido (R$ <?php echo number_format($total, 2, ',', '.'); ?>)</button>
+                    </div>
+                </div>
+            </form>
+
+            <div id="msgPlaceholder" class="mt-3"></div>
+        </div>
+    </div>
+</div>
+
+<?php include "../partials/footer.php"; ?>
+
+<!-- JavaScript: consulta ViaCEP e preenche os campos -->
 <script>
-document.getElementById('cep').addEventListener('blur', function() {
-    var cep = this.value.replace(/\D/g, ''); // Remove caracteres não numéricos
+(function () {
+    const cepInput = document.getElementById('cep');
+    const ruaInput = document.getElementById('rua');
+    const bairroInput = document.getElementById('bairro');
+    const cidadeInput = document.getElementById('cidade');
+    const estadoInput = document.getElementById('estado');
+    const form = document.getElementById('finalizarForm');
+    const msgPlaceholder = document.getElementById('msgPlaceholder');
 
-    if (cep !== "") {
-        // Expressão regular para validar o CEP
-        var validacep = /^[0-9]{8}$/;
-        if (validacep.test(cep)) {
-            // Faz a requisição AJAX para a API ViaCEP
-            var url = `https://viacep.com.br/ws/${cep}/json/`;
+    // Normaliza CEP (remove não-dígitos)
+    function normalizeCep(value) {
+        return value.replace(/\D/g, '');
+    }
 
-            fetch(url)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.erro) {
-                        alert("CEP não encontrado.");
-                    } else {
-                        // Preenche os campos do formulário com os dados retornados
-                        document.getElementById('rua').value = data.logradouro;
-                        document.getElementById('bairro').value = data.bairro;
-                    }
-                })
-                .catch(error => {
-                    console.error("Erro ao buscar o CEP:", error);
-                    alert("Erro ao buscar o CEP.");
-                });
-        } else {
-            alert("CEP inválido.");
+    // Mostra mensagem temporária
+    function showMessage(text, type = 'danger') {
+        msgPlaceholder.innerHTML = `<div class="alert alert-${type}" role="alert">${text}</div>`;
+        // desaparece depois de 5s
+        setTimeout(() => { if (msgPlaceholder) msgPlaceholder.innerHTML = ''; }, 5000);
+    }
+
+    // Busca ViaCEP
+    async function buscarCep(cep) {
+        try {
+            const url = `https://viacep.com.br/ws/${cep}/json/`;
+            const resp = await fetch(url);
+            if (!resp.ok) throw new Error('Erro na requisição ViaCEP');
+            const data = await resp.json();
+            console.log('ViaCEP:', data);
+            return data;
+        } catch (err) {
+            console.error(err);
+            throw err;
         }
     }
-});
+
+    // Evento: ao sair do campo ou ao digitar 8 dígitos e pressionar Enter
+    cepInput.addEventListener('blur', onCepChange);
+    cepInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            onCepChange();
+        }
+    });
+
+    async function onCepChange() {
+        const raw = normalizeCep(cepInput.value);
+        if (raw.length !== 8) {
+            // Não limpa automaticamente (apenas alerta)
+            showMessage('Digite um CEP válido com 8 dígitos (somente números).', 'warning');
+            return;
+        }
+
+        // opcional: mostra carregando
+        showMessage('Consultando CEP...', 'info');
+
+        try {
+            const data = await buscarCep(raw);
+            if (data.erro) {
+                showMessage('CEP não encontrado.', 'warning');
+                // limpa os campos auto preenchíveis
+                ruaInput.value = '';
+                bairroInput.value = '';
+                cidadeInput.value = '';
+                estadoInput.value = '';
+                return;
+            }
+            // Preenche os campos (uso de fallback para string vazia)
+            ruaInput.value = data.logradouro || '';
+            bairroInput.value = data.bairro || '';
+            cidadeInput.value = data.localidade || '';
+            estadoInput.value = data.uf || '';
+            showMessage('Endereço preenchido com sucesso.', 'success');
+        } catch (err) {
+            showMessage('Erro ao consultar CEP. Verifique sua conexão.', 'danger');
+        }
+    }
+
+    // Validação simples no submit: garante campos obrigatórios preenchidos
+    form.addEventListener('submit', function (e) {
+        // Se quiser prevenir e validar manualmente, use e.preventDefault() aqui.
+        const requiredFields = [
+            { el: cepInput, name: 'CEP' },
+            { el: ruaInput, name: 'Rua' },
+            { el: bairroInput, name: 'Bairro' },
+            { el: cidadeInput, name: 'Cidade' },
+            { el: estadoInput, name: 'Estado' },
+            { el: document.getElementById('numero'), name: 'Número' },
+            { el: document.getElementById('pagamento'), name: 'Pagamento' }
+        ];
+
+        for (let f of requiredFields) {
+            if (!f.el || !f.el.value || f.el.value.trim() === '') {
+                e.preventDefault();
+                showMessage(`Preencha o campo obrigatório: ${f.name}`, 'warning');
+                f.el.focus && f.el.focus();
+                return false;
+            }
+        }
+
+        // deixa o envio seguir para o seu controller PHP
+        return true;
+    });
+
+})();
 </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
-  </body>
-</html>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<?php include "../partials/footer.php"; ?>
