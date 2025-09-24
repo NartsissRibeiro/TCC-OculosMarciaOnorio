@@ -3,7 +3,6 @@ include "../partials/header.php";
 include "../partials/navbar.php";
 include "../../db/conexao.php";
 
-// Verifica login
 if (!SessionController::isLoggedIn()) {
     echo "<div class='alert alert-danger'>Você precisa fazer login para finalizar o pedido. <a href='../usuario/index.php' class='btn btn-sm btn-warning ms-2'>Fazer Login</a></div>";
     include "../partials/footer.php";
@@ -34,7 +33,6 @@ if (mysqli_num_rows($result) === 0) {
     exit;
 }
 
-// Calcula total
 $total = 0;
 $produtosCarrinho = [];
 while ($row = mysqli_fetch_assoc($result)) {
@@ -52,7 +50,6 @@ mysqli_close($conexao);
         </div>
         <div class="card-body">
 
-            <!-- Lista de produtos -->
             <h5>Produtos no Pedido:</h5>
             <ul class="list-group mb-3">
                 <?php foreach ($produtosCarrinho as $item): ?>
@@ -78,57 +75,50 @@ mysqli_close($conexao);
 
                <form id="finalizarForm" action="../../controller/carrinho/pedido.php" method="POST" novalidate>
                 <div class="row g-3">
-                    <!-- CEP -->
+        
                     <div class="col-md-4">
-                        <label for="cep" class="form-label">CEP *</label>
+                        <label for="cep" class="form-label">CEP</label>
                         <input type="text" id="cep" name="cep" class="form-control" placeholder="Ex: 01001-000 ou 01001000" required>
                     </div>
 
-                    <!-- Rua / Logradouro -->
                     <div class="col-md-8">
-                        <label for="rua" class="form-label">Rua *</label>
+                        <label for="rua" class="form-label">Rua</label>
                         <input type="text" id="rua" name="rua" class="form-control text-capitalize" readonly required>
                     </div>
 
-                    <!-- Bairro -->
                     <div class="col-md-4">
-                        <label for="bairro" class="form-label">Bairro *</label>
+                        <label for="bairro" class="form-label">Bairro</label>
                         <input type="text" id="bairro" name="bairro" class="form-control text-capitalize" readonly required>
                     </div>
 
-                    <!-- Cidade -->
+                    
                     <div class="col-md-4">
-                        <label for="cidade" class="form-label">Cidade *</label>
+                        <label for="cidade" class="form-label">Cidade</label>
                         <input type="text" id="cidade" name="cidade" class="form-control text-capitalize" readonly required>
                     </div>
 
-                    <!-- Estado -->
                     <div class="col-md-4">
-                        <label for="estado" class="form-label">Estado *</label>
+                        <label for="estado" class="form-label">Estado</label>
                         <input type="text" id="estado" name="estado" class="form-control text-uppercase" readonly required>
                     </div>
 
-                    <!-- Número -->
                     <div class="col-md-3">
-                        <label for="numero" class="form-label">Número *</label>
+                        <label for="numero" class="form-label">Número</label>
                         <input type="text" id="numero" name="numero" class="form-control" required>
                     </div>
 
-                    <!-- Complemento -->
                     <div class="col-md-9">
                         <label for="complemento" class="form-label">Complemento</label>
                         <input type="text" id="complemento" name="complemento" class="form-control text-capitalize" placeholder="Opcional">
                     </div>
 
-                    <!-- Mensagem -->
                     <div class="col-12">
                         <label for="mensagem" class="form-label">Mensagem (opcional)</label>
                         <textarea id="mensagem" name="mensagem" class="form-control" maxlength="250" rows="2" placeholder="Deixe uma mensagem para o pedido"></textarea>
                     </div>
 
-                    <!-- Pagamento -->
                     <div class="col-md-6">
-                        <label for="pagamento" class="form-label">Forma de Pagamento *</label>
+                        <label for="pagamento" class="form-label">Forma de Pagamento</label>
                         <select id="pagamento" name="pagamento" class="form-select" required>
                             <option value="" selected disabled>Selecione</option>
                             <option value="debito">Débito</option>
@@ -138,10 +128,8 @@ mysqli_close($conexao);
                         </select>
                     </div>
 
-                    <!-- Total (escondido) -->
                     <input type="hidden" name="total" value="<?php echo number_format($total, 2, '.', ''); ?>">
 
-                    <!-- Botões -->
                     <div class="col-12 d-flex justify-content-between align-items-center mt-3">
                         <a href="../carrinho/index.php" class="btn btn-secondary">Voltar ao Carrinho</a>
                         <button type="submit" class="btn btn-success" id="btnEnviar">Confirmar Pedido (R$ <?php echo number_format($total, 2, ',', '.'); ?>)</button>

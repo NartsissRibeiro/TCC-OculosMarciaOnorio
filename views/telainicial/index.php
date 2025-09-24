@@ -58,4 +58,15 @@
         </div>
     </div>
 </section>
+<section class="footer">
+    <div class="share">
+        
+    <a href=""><img width="30" height="30" src="https://img.icons8.com/ios-glyphs/30/ffffff/instagram-new.png" alt="instagram-new"/></a>
+
+       <a href=""> <img width="30" height="30" src="https://img.icons8.com/ios-glyphs/30/ffffff/facebook-new.png" alt="facebook-new"/></a>
+
+        <a href=""><img width="30" height="30" src="https://img.icons8.com/ios-glyphs/30/ffffff/twitterx--v1.png" alt="twitterx--v1"/></a>
+
+    </div>
+ </section>
    <?php include '../partials/footer.php' ?>

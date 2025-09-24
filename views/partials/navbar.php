@@ -13,7 +13,7 @@
 ?>
 <nav class="navbar navbar-expand-lg bg-dark navbar-dark fixed-top">
   <div class="container-fluid">
-    <a class="navbar-brand" href="aparte/Site.Marcia/index.html">
+    <a class="navbar-brand" href="../telainicial/index.php">
       <img src="../../assets/img/logo-invertido-removebg-preview copy.png" alt="Logo" width="200" height="50">
     </a>
 
