@@ -1,5 +1,4 @@
 <?php
-session_start();
 include_once "../../Controller/Session/Session.php";
 include "../../db/conexao.php";
 

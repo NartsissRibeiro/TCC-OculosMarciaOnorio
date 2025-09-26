@@ -63,8 +63,11 @@
 
         echo "</tbody></table>";
         echo "<h4>Total: R$ " . number_format($total, 2, ',', '.') . "</h4>";
-        echo "<div class='d-flex justify-content-end mt-3'><a href='../telainicial/index.php' class='btn'>Continuar Comprando</a></div>";
-        echo "<div class='d-flex justify-content-end mt-3'><a href='../pedido/new.php' class='btn'>Finalizar pedido</a></div>";
+        echo "<div class='d-flex justify-content-between mt-3'>
+        <a href='../telainicial/index.php' class='btn btn-primary'>Continuar Comprando</a>
+        <a href='../pedido/new.php' class='btn btn-success'>Finalizar Pedido</a>
+      </div>";
+
     } else {
         echo "<div class='alert alert-warning mt-3'>Seu carrinho está vazio.</div>";
     }

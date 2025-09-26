@@ -4,8 +4,8 @@ include "../../db/conexao.php";
 $name_produto = $_POST['name'];
 $price_produto = $_POST['price'];
 
-// Configurações para upload de imagem
-$target_dir = "../../assets/img/"; // Diretório onde as imagens serão salvas
+
+$target_dir = "../../assets/img/"; 
 $image_name = "";
 
 if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {

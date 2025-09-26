@@ -1,5 +1,6 @@
 <?php include '../partials/header.php'; ?>
 <?php include '../partials/navbar.php'; ?>
+
 <body>
     <?php include '../partials/navbar.php' ?>
     <div class="home-container">

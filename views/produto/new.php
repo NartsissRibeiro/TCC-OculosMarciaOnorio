@@ -24,25 +24,22 @@
     ?>
                         <form action="../../Controller/produto/New.php" method="post" enctype="multipart/form-data"> 
                             <div class="row">
-                                <div class="col-md-2">
+                                <div class="col-md-6">
                                     <label for="name" class="form-label">Nome: </label>
-                                    <input type="text" class="form-control bg-dark text-light border-secondary" id="name_produto" name="name_produto" required>
+                                    <input type="text" class="form-control" id="name_produto" name="name_produto" required>
                                 </div>
 
-                                <div class="col-md-2">
+                                <div class="col-md-3">
                                     <label for="price" class="form-label">Preço: </label>
-                                    <input type="number" class="form-control bg-dark text-light border-secondary" id="price_produto" name="price_produto" step="0.01" min="0" max="999" required>
+                                    <input type="number" class="form-control" id="price_produto" name="price_produto" step="0.01" min="0" max="999" required>
                                 </div>
 
-                                    <label for="image">Imagem do Produto:</label>
-                                    <input type="file" name="image" id="image" accept="image/*" required>
-
-                                <div class="col-md-2">
+                                <div class="col-md-3">
                                     <label for="estoque" class="form-label">Estoque: </label>
-                                    <input type="number" class="form-control bg-dark text-light border-secondary" id="estoque" name="estoque" min="0" max="999" required>
+                                    <input type="number" class="form-control" id="estoque" name="estoque" min="0" max="999" required>
                                 </div>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-6">
                                 <label for="id_material" class="form-label">Material</label>
                                 <select id="id_material" name="id_material" required class="form-select">
                                 <option value="" selected>Selecione um material: </option>
@@ -56,7 +53,7 @@
                                             } ?>
                                 </select>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-6">
                                 <label for="id_cor" class="form-label">cor</label>
                                 <select id="id_cor" name="id_cor" required class="form-select">
                                 <option value="" selected>Selecione uma cor: </option>
@@ -68,6 +65,8 @@
                                             } else {
                                                 echo "<option value=''>Nenhuma categoria encontrada</option>";
                                             } ?>
+                                <label for="image">Imagem do Produto:</label>
+                                <input type="file" name="image" id="image" accept="image/*" required>
                                 </select>
                             </div>
                             </div>

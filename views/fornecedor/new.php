@@ -2,7 +2,6 @@
 include '../partials/header.php';
 include '../partials/navbar.php';
 include '../../db/conexao.php';
-session_start();
 ?>
 <div class="container">
     <div class="row">
