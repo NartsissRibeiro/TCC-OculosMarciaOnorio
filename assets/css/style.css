@@ -97,15 +97,22 @@ section {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 2rem;
+    gap: 1rem;
     background-color: #13131a;
     padding: 2rem;
     border-radius: var(--radius);
 }
 
+.about .container-image,
+.about .content {
+    flex: 1 1 45%; 
+    max-width: 48%;
+}
+
 .about img {
     border-radius: var(--radius);
     max-width: 100%;
+    height: auto;
 }
 
 /* produtos */
@@ -121,7 +128,7 @@ section {
     border-radius: var(--radius);
     text-align: center;
     transition: var(--transition);
-    background-color: #1c1c1c;
+    background-color: #000;
 }
 
 .menu .box:hover {
@@ -136,6 +143,8 @@ section {
 .menu .box h3,
 .menu .box .price {
     color: var(--white);
+    font-size: 1.8rem;
+    margin-top: 0.5rem;
 }
 
 .menu .box:hover h3,
@@ -148,6 +157,27 @@ section {
     text-decoration: line-through;
     color: var(--gray);
 }
+.quantity-input {
+    width: 100px;
+    text-align: center;
+    padding: 4px;
+    background: transparent;
+    color: var(--white);
+    border: var(--border);
+    border-radius: var(--radius);
+    font-size: 16px;
+    transition: color 0.3s ease;
+}
+
+.quantity-input:hover,
+.quantity-input:focus {
+    color: #000;
+}
+
+.menu .box:hover .quantity-input:not(:hover):not(:focus) {
+    color: var(--white); /* força voltar a branco */
+}
+
 
 /* form */
 .container-form,
@@ -224,18 +254,20 @@ input:focus {
 /*sobre nos */
 .about .row {
     display: flex;
-    flex-wrap: wrap; 
+    flex-wrap: nowrap; 
     align-items: center;
-    gap: 2rem;
-    background-color: #13131a;
-    padding: 2rem;
-    border-radius: var(--radius);
+    justify-content: center;
+    gap: 0.5rem;
 }
 
 .about .container-image,
 .about .content {
-    flex: 1 1 40%; 
-    max-width: 50%; 
+    flex: 1; 
+    max-width: 100%; 
+}
+
+.about .content {
+    margin-left: 1rem;
 }
 
 .about img {
@@ -318,7 +350,7 @@ input:focus {
 .container-form select,
 .container-form textarea {
     font-size: 0.9rem;
-    padding: 0.6rem; /* deixa mais compacto */
+    padding: 0.6rem; 
 }
 
 .container-form .btn {
@@ -326,13 +358,12 @@ input:focus {
     padding: 0.6rem 1.2rem;
 }
 
-/* Card branco */
 .card {
     padding-top: 30px;
     display: flex;
     justify-content: center;
-    background-color: #fff; /* fundo branco */
-    color: #000; /* texto preto */
+    background-color: #fff; 
+    color: #000; 
     border: 1px solid var(--main-color);
     border-radius: var(--radius);
 }
@@ -340,10 +371,9 @@ input:focus {
 /* Título do card */
 .card-header h2 {
     margin: 0;
-    color: #000; /* preto, em vez de rosa */
+    color: #000; 
 }
 
-/* Form mais organizado */
 form .row {
     margin-bottom: 1rem;
 }
@@ -375,4 +405,30 @@ form .col-md-12 {
     background: transparent;
     color: var(--main-color);
     border: 0.1rem solid var(--main-color);
+}
+
+h5 {
+    color: #13131a;
+}
+
+/* Mensagem de cadastro */
+.flash-message {
+    position: fixed;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--main-color);
+    color: #000;
+    padding: 1rem 2rem;
+    border-radius: var(--radius);
+    z-index: 1000;
+    font-weight: bold;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    opacity: 1;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.flash-message.hide {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-20px);
 }

@@ -52,10 +52,6 @@ $conexao->close();
     <?php if (!empty($loginError)): ?>
       <div class="alert alert-danger text-center"><?= $loginError ?></div>
     <?php endif; ?>
-    <?php
-          if (isset($_GET['msgSucesso']) && !empty($_GET['msgSucesso'])) {
-            echo '<div class="alert alert-success text-center">' . htmlspecialchars($_GET['msgSucesso']) . '</div>';
-            }?>
     <div class="mb-2">
       <label class="form-label text-light">Email</label>
       <input type="email" name="email" placeholder="Digite seu e-mail" class="form-control bg-dark text-light border-secondary" required>
@@ -73,7 +69,9 @@ $conexao->close();
 
     <button type="submit" class="btn w-100 py-2" 
             style="background-color: var(--main-color); color: var(--white); border: none; padding: 1.2rem;">
-      Login
+      <h5>
+        Login
+      </h5>
     </button>
 
     <div class="link-dois text-center mt-2">

@@ -30,7 +30,8 @@ if (SessionController::isLoggedIn()) {
         var_dump($_POST);
     }
 } else {
-    header('Location: ../../views/telainicial/index.php?message=Você precisa estar logado para adicionar itens ao carrinho.');
+    $message = "Você precisa estar logado para adicionar itens ao carrinho.";
+   header('Location: ../../views/telainicial/index.php?message=' . urlencode($message) . '#menu');
     exit();
 }
 

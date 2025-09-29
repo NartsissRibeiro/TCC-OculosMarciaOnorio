@@ -1,7 +1,23 @@
+ <?php if (session_status() == PHP_SESSION_NONE) session_start(); ?>
 <?php include '../partials/header.php'; ?>
 <?php include '../partials/navbar.php'; ?>
-
 <body>
+<?php if(isset($_SESSION['flash_msg'])): ?>
+<div id="flash-message" class="flash-message">
+    <?= htmlspecialchars($_SESSION['flash_msg']); ?>
+</div>
+<script>
+    setTimeout(() => {
+        const msg = document.getElementById('flash-message');
+        if(msg){
+            msg.style.transition = "opacity 0.5s ease";
+            msg.style.opacity = 0;
+            setTimeout(() => msg.remove(), 500);
+        }
+    }, 3000);
+</script>
+<?php unset($_SESSION['flash_msg']); endif; ?>
+
     <?php include '../partials/navbar.php' ?>
     <div class="home-container">
         <section>
@@ -9,13 +25,20 @@
                 <!--<img src="../../assets/img/beautiful-african-woman-monochrome-portrait (1).jpg" width="300"> -->
                 <h3>VEJA O MUNDO COM ESTILO DESCUBRA OS ÓCULOS ESCUROS <b>MÁRCIA ONÓRIO</b></h3>
                 <p>Márcia Onório: Enxergando o futuro com estilo e elegância, refletindo sua essência em cada par de óculos.</p>
-                <a href="#" class="btn">Escolha o seu Agora</a>
+                <a href="#menu" class="btn">Escolha o seu Agora</a>
             </div>
         </section>
     </div>
 
 <section class="menu" id="menu">
     <h2 class="title">Nossos <span>Produtos</span></h2>
+<?php
+if (isset($_GET['message']) && !empty($_GET['message'])) {
+    echo '<div class="alert alert-warning text-center" style="margin-bottom: 20px;">' 
+         . htmlspecialchars($_GET['message']) . 
+         '</div>';
+}
+?>
     <div class="box-container">
         <?php
         include '../../db/conexao.php';
@@ -46,18 +69,28 @@
         ?>
     </div>
 </section>
-<section class="about" id="about">
-    <h2 class="title">Sobre <span>Nós</span></h2>
-    <div class="row">
-        <div class="container-image">
-            <img src="../../assets/img/fototia.jpeg" alt="sobre-nos" width="400" height="440"> <!-- Reduzido -->
-        </div>
-        <div class="content">
-            <h3>O QUE FAZEM NOSSOS ÓCULOS ESPECIAIS?</h3>
-            <p>Os óculos escuros Márcia Onório são a perfeita combinação de elegância, inovação e qualidade superior, refletindo a essência do estilo único e a paixão por cada detalhe.</p>
-            <a href="#" class="btn">Saiba mais</a>
-        </div>
+<section class="about py-5" id="about">
+  <div class="container">
+    <h2 class="title text-center mb-5">Sobre <span>Nós</span></h2>
+    <div class="row align-items-center">
+      
+      <div class="col-5 text-center">
+        <img src="../../assets/img/fototia.jpeg" 
+             alt="sobre-nos" 
+             class="img-fluid rounded">
+      </div>
+
+      <div class="col-7 text-white">
+        <h3 class="mb-3">O QUE FAZEM NOSSOS ÓCULOS ESPECIAIS?</h3>
+        <p>
+          Os óculos escuros Márcia Onório são a perfeita combinação de elegância,
+          inovação e qualidade superior,
+          refletindo a essência do estilo único e a paixão por cada detalhe.
+        </p>
+        <a href="#" class="btn">Saiba mais</a>
+      </div>
     </div>
+  </div>
 </section>
 <section class="footer">
     <div class="share">

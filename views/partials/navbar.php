@@ -4,7 +4,6 @@
     <a class="navbar-brand" href="../telainicial/index.php">
       <img src="../../assets/img/logo-invertido-removebg-preview copy.png" alt="Logo" width="200" height="50">
     </a>
-
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -16,7 +15,7 @@
       <?php endif; ?>
       <ul class="navbar-nav ms-auto">
         <li class="nav-item"><a class="nav-link" href="../telainicial/index.php">Página inicial</a></li>
-        <li class="nav-item"><a class="nav-link" href="#about">Sobre</a></li>
+        <li class="nav-item"><a class="nav-link" href="../telainicial/index.php#about">Sobre</a></li>
 
         <?php if (SessionController::getUserTipo() === 'admin'): ?>
           <li class="nav-item dropdown">
@@ -59,6 +58,10 @@
         <?php endif; ?>
       </ul>
       <a class="ms-3" href="../carrinho/index.php"><img src="../../assets/img/shopping-cart--v1.png" alt="Carrinho" class="img-carrinho"></a>
+      <form class="d-flex ms-3" role="search" method="get" action="../produto/pesquisa.php">
+    <input class="form-control" type="search" name="q" placeholder="Pesquisar produto" aria-label="Search"/>
+    <button class="btn btn-outline-light ms-2" type="submit">Buscar</button>
+  </form>
     </div>
   </div>
 </nav>
