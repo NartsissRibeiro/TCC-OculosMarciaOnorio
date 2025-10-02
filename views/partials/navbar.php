@@ -37,7 +37,7 @@
           <ul class="dropdown-menu">
             <li><a class="dropdown-item" href="../produto/index.php">Produto</a></li>
             <li><a class="dropdown-item" href="../material/index.php">Material</a></li>
-            <li><a class="dropdown-item" href="index.php">Cor</a></li>
+            <li><a class="dropdown-item" href="../cor/index.php">Cor</a></li>
             <li><a class="dropdown-item" href="index.php">Fornecedor</a></li>
             <li><a class="dropdown-item" href="index.php">Mercadoria</a></li>
             <li><a class="dropdown-item" href="index.php">Pedido</a></li>

@@ -22,7 +22,6 @@
     <div class="home-container">
         <section>
             <div class="content">
-                <!--<img src="../../assets/img/beautiful-african-woman-monochrome-portrait (1).jpg" width="300"> -->
                 <h3>VEJA O MUNDO COM ESTILO DESCUBRA OS ÓCULOS ESCUROS <b>MÁRCIA ONÓRIO</b></h3>
                 <p>Márcia Onório: Enxergando o futuro com estilo e elegância, refletindo sua essência em cada par de óculos.</p>
                 <a href="#menu" class="btn">Escolha o seu Agora</a>

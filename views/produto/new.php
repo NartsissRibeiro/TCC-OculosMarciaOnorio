@@ -39,37 +39,44 @@
                                     <input type="number" class="form-control" id="estoque" name="estoque" min="0" max="999" required>
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <label for="id_material" class="form-label">Material</label>
-                                <select id="id_material" name="id_material" required class="form-select">
-                                <option value="" selected>Selecione um material: </option>
-                                    <?php
-                                    if ($result_material->num_rows > 0) {
-                                        while ($row = $result_material->fetch_assoc()) {
-                                            echo "<option value='" . $row['id_material'] . "'>" . $row['nome_material'] . "</option>";
+
+                            <div class="row mt-3">
+                                <div class="col-md-4">
+                                    <label for="id_material" class="form-label">Material</label>
+                                    <select id="id_material" name="id_material" required class="form-select">
+                                        <option value="" selected>Selecione um material: </option>
+                                        <?php
+                                        if ($result_material->num_rows > 0) {
+                                            while ($row = $result_material->fetch_assoc()) {
+                                                echo "<option value='" . $row['id_material'] . "'>" . $row['nome_material'] . "</option>";
                                             }
-                                            } else {
-                                                echo "<option value=''>Nenhuma categoria encontrada</option>";
-                                            } ?>
-                                </select>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="id_cor" class="form-label">cor</label>
-                                <select id="id_cor" name="id_cor" required class="form-select">
-                                <option value="" selected>Selecione uma cor: </option>
-                                    <?php
-                                    if ($result_cor->num_rows > 0) {
-                                        while ($row = $result_cor->fetch_assoc()) {
-                                            echo "<option value='" . $row['id_cor'] . "'>" . $row['nome_cor'] . "</option>";
+                                        } else {
+                                            echo "<option value=''>Nenhuma categoria encontrada</option>";
+                                        } ?>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label for="id_cor" class="form-label">Cor</label>
+                                    <select id="id_cor" name="id_cor" required class="form-select">
+                                        <option value="" selected>Selecione uma cor: </option>
+                                        <?php
+                                        if ($result_cor->num_rows > 0) {
+                                            while ($row = $result_cor->fetch_assoc()) {
+                                                echo "<option value='" . $row['id_cor'] . "'>" . $row['nome_cor'] . "</option>";
                                             }
-                                            } else {
-                                                echo "<option value=''>Nenhuma categoria encontrada</option>";
-                                            } ?>
-                                <label for="image">Imagem do Produto:</label>
-                                <input type="file" name="image" id="image" accept="image/*" required>
-                                </select>
+                                        } else {
+                                            echo "<option value=''>Nenhuma cor encontrada</option>";
+                                        } ?>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label for="image" class="form-label">Imagem do Produto:</label>
+                                    <input type="file" name="image" id="image" accept="image/*" class="form-control" required>
+                                </div>
                             </div>
-                            </div>
+
                             <div class="d-flex justify-content-end">
                                 <button type="submit" class="btn btn-primary mt-3 mb-1 me-2">Cadastrar</button>
                                 <button type="reset" class="btn btn-secondary mt-3 mb-1 me-2">Limpar</button>
