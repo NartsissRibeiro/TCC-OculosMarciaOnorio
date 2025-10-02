@@ -432,3 +432,9 @@ h5 {
     opacity: 0;
     transform: translateX(-50%) translateY(-20px);
 }
+.produto-link {
+    display: block;
+    text-decoration: none; 
+    color: inherit;
+    cursor: pointer;
+}

@@ -49,11 +49,14 @@ if (isset($_GET['message']) && !empty($_GET['message'])) {
             <div class="box">
     <form method="POST" action="../../Controller/carrinho/new.php">
         <input type="hidden" name="id_produto" value="<?php echo $row['id_produto']; ?>">
+        <a href="telaproduto.php?id_produto=<?php echo $row['id_produto']; ?>" class="produto-link">
         <div class="box-content">
             <img src="../../assets/img/<?php echo htmlspecialchars($row['imagem_produto']); ?>" 
                  alt="<?php echo htmlspecialchars($row['nome_produto']); ?>" width="250" height="250">
             <h3><?php echo htmlspecialchars($row['nome_produto']); ?></h3>
-            <div class="price">R$<?php echo number_format($row['preco_produto'], 2, ',', '.'); ?></div>
+            <div class="price">R$<?php echo number_format($row['preco_produto'], 2, ',', '.'); ?>
+        </div>
+        </a>
             <div class="quantity-selector">
                 <input type="number" name="quantidade" class="quantity-input" 
        value="0" min="1" max="<?php echo htmlspecialchars($row['estoque_produto']); ?>" 
