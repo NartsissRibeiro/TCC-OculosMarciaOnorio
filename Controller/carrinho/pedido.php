@@ -21,7 +21,7 @@ $estadoNome = $_POST['estado'] ?? '';
 $numero = $_POST['numero'] ?? '';
 $complemento = $_POST['complemento'] ?? null;
 $mensagem = $_POST['mensagem'] ?? null;
-$tipoPagamento = $_POST['pagamento'] ?? '';
+//$tipoPagamento = $_POST['pagamento'] ?? '';
 
 // Inicia transação
 $conexao->begin_transaction();
@@ -77,20 +77,23 @@ try {
     $logradouroId = $conexao->insert_id;
 
     // --- 5. Pagamento ---
-    $stmt = $conexao->prepare("INSERT INTO pagamento (tipo_pagamento) VALUES (?)");
-    $stmt->bind_param("s", $tipoPagamento);
-    $stmt->execute();
-    $pagamentoId = $conexao->insert_id;
+    //$stmt = $conexao->prepare("INSERT INTO pagamento (tipo_pagamento) VALUES (?)");
+    //$stmt->bind_param("s", $tipoPagamento);
+    //$stmt->execute();
+    //$pagamentoId = $conexao->insert_id;
+
+    $acao = $_POST['acao'] ?? 'pago'; // valor vindo do botão
+    $statusId = ($acao === 'nao_pago') ? 2 : 1; // 1 = Não Pago, 2 = Pago
 
     // --- 6. Inserir pedido ---
     $stmt = $conexao->prepare("
         INSERT INTO pedido 
-        (data_pedido, id_pagamento, id_bairro, complemento, mensagem, valor_total, id_logradouro, id_user, id_cidade)
+        (data_pedido, id_status, id_bairro, complemento, mensagem, valor_total, id_logradouro, id_user, id_cidade)
         VALUES (NOW(), ?, ?, ?, ?, ?, ?, ?, ?)
     ");
     $stmt->bind_param(
         "iissdiii",
-        $pagamentoId,
+        $statusId,
         $bairroId,
         $complemento,
         $mensagem,

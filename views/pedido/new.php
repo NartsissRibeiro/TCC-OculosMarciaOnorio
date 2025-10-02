@@ -116,8 +116,8 @@ mysqli_close($conexao);
                         <label for="mensagem" class="form-label">Mensagem (opcional)</label>
                         <textarea id="mensagem" name="mensagem" class="form-control" maxlength="250" rows="2" placeholder="Deixe uma mensagem para o pedido"></textarea>
                     </div>
-
-                    <div class="col-md-6">
+                    
+                    <!--<div class="col-md-6">
                         <label for="pagamento" class="form-label">Forma de Pagamento</label>
                         <select id="pagamento" name="pagamento" class="form-select" required>
                             <option value="" selected disabled>Selecione</option>
@@ -126,13 +126,16 @@ mysqli_close($conexao);
                             <option value="pix">Pix</option>
                             <option value="dinheiro">Dinheiro</option>
                         </select>
-                    </div>
+                    </div>-->
 
                     <input type="hidden" name="total" value="<?php echo number_format($total, 2, '.', ''); ?>">
 
                     <div class="col-12 d-flex justify-content-between align-items-center mt-3">
                         <a href="../carrinho/index.php" class="btn btn-secondary">Voltar ao Carrinho</a>
-                        <button type="submit" class="btn btn-success" id="btnEnviar">Confirmar Pedido (R$ <?php echo number_format($total, 2, ',', '.'); ?>)</button>
+                        <button type="submit" name="acao" class="btn btn-success" value="nao_pago" id="btnEnviar">fazer pedido (R$ <?php echo number_format($total, 2, ',', '.'); ?>)</button>
+                        <!--<button type="submit" name="acao" value="nao_pago" class="btn btn-danger">
+                            Finalizar como Não Pago
+                        </button>-->
                     </div>
                 </div>
             </form>
@@ -234,7 +237,7 @@ mysqli_close($conexao);
             { el: cidadeInput, name: 'Cidade' },
             { el: estadoInput, name: 'Estado' },
             { el: document.getElementById('numero'), name: 'Número' },
-            { el: document.getElementById('pagamento'), name: 'Pagamento' }
+            //{ el: document.getElementById('pagamento'), name: 'Pagamento' }
         ];
 
         for (let f of requiredFields) {

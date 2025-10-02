@@ -15,9 +15,9 @@ if (!$pedidoId) {
 
 $stmt = $conexao->prepare("
     SELECT p.id_pedido, p.data_pedido, p.valor_total, p.complemento, p.mensagem,
-           pg.tipo_pagamento, l.logradouro, b.nome_bairro, c.nome_cidade, e.nome_estado
+           st.tipo_status, l.logradouro, b.nome_bairro, c.nome_cidade, e.nome_estado
     FROM pedido p
-    INNER JOIN pagamento pg ON p.id_pagamento = pg.id_pagamento
+    INNER JOIN status st ON p.id_status = st.id_status
     INNER JOIN logradouro l ON p.id_logradouro = l.id_logradouro
     INNER JOIN bairro b ON p.id_bairro = b.id_bairro
     INNER JOIN cidade c ON p.id_cidade = c.id_cidade
@@ -59,7 +59,7 @@ $itensResult = $stmtItems->get_result();
                 <strong>Pedido ID:</strong> <?php echo $pedido['id_pedido']; ?><br>
                 <strong>Data:</strong> <?php echo $pedido['data_pedido']; ?><br>
                 <strong>Total:</strong> R$ <?php echo number_format($pedido['valor_total'], 2, ',', '.'); ?><br>
-                <strong>Pagamento:</strong> <?php echo htmlspecialchars($pedido['tipo_pagamento']); ?><br>
+                <strong>Status:</strong> <?php echo htmlspecialchars($pedido['tipo_status']); ?><br>
                 <?php if ($pedido['mensagem']): ?>
                     <strong>Mensagem:</strong> <?php echo htmlspecialchars($pedido['mensagem']); ?><br>
                 <?php endif; ?>
