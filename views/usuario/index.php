@@ -64,7 +64,7 @@ $conexao->close();
     </div>
 
     <div class="link-um d-flex justify-content-between align-items-center">
-      <a href="recuperacao-senha/Redefinirsenha.html" style="color: var(--main-color); text-decoration: none;">Esqueci a senha</a>
+      <a href="esqueci_senha.php" style="color: var(--main-color); text-decoration: none;">Esqueci a senha</a>
     </div>
 
     <button type="submit" class="btn w-100 py-2" 
