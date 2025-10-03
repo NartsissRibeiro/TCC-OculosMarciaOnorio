@@ -2,7 +2,7 @@
 include "../../db/conexao.php";
 
 $id_material = isset($_POST['id_material']) ? (int) $_POST['id_material'] : 0;
-$nome_material = isset($_POST['nome_material']) ? $conexao->real_escape_string($_POST['nome_material=']) : '';
+$nome_material = isset($_POST['nome_material']) ? $conexao->real_escape_string($_POST['nome_material']) : '';
 
 if ($id_material > 0 && $nome_material != '') {
     $sql = "UPDATE material SET nome_material='$nome_material' WHERE id_material=$id_material";
