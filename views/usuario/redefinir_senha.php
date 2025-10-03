@@ -24,39 +24,48 @@ if (isset($_GET['token'])) {
                 $novaSenhaHash = password_hash($novaSenha, PASSWORD_DEFAULT);
 
                 // Atualiza a senha do usuário
-                $stmt = $conexao->prepare("UPDATE usuarios SET senha_user = ?, reset_token = NULL, reset_token_expire = NULL WHERE id_user = ?");
-                $stmt->bind_param('si', $novaSenhaHash, $userId);
-                $stmt->execute();
+                $stmtUpdate = $conexao->prepare("UPDATE usuarios SET senha_user = ?, reset_token = NULL, reset_token_expire = NULL WHERE id_user = ?");
+                $stmtUpdate->bind_param('si', $novaSenhaHash, $userId);
+                $stmtUpdate->execute();
 
                 header('Location: index.php?senha=sucesso');
                 exit();
             }
+            ?>
 
-            echo "<div class='container mt-5'>
-                <form class='login-form p-4 border rounded shadow-sm' method='POST' action=''>";
-            echo "<h2 class='mb-4 text-center'>Redefinição de Senha</h2>
-                         <div class='mb-3'>
-                            <label for='exampleInputEmail1' class='form-label'>Nova Senha</label>
-                            <input type='password' class='form-control' id='exampleInputEmail1' name='novaSenha' id='novaSenha'aria-describedby='emailHelp' required>
-                         </div>
-                        <button type='submit' class='btn btn-primary w-100'>Redefinir Senha</button>
-                 </form>
-        </div>";
+            <main class="primeiro" style="max-width: 500px; margin: 120px auto; padding: 2rem; background-color: #1c1c1c; border-radius: var(--radius); box-shadow: 0 0 15px rgba(255, 192, 203, 0.15); font-size: 1.4rem;">
+                <form method="POST" action="">
+                    <h2 class="text-center mb-4" style="font-size: 2.4rem; font-weight: 600; color: var(--main-color);">Redefinição de Senha</h2>
+                    
+                    <div class="mb-2">
+                        <label class="form-label text-light" for="novaSenha">Nova Senha</label>
+                        <input type="password" name="novaSenha" id="novaSenha" placeholder="Digite sua nova senha" class="form-control bg-dark text-light border-secondary" required>
+                    </div>
+
+                    <button type="submit" class="btn w-100 py-2" style="background-color: var(--main-color); color: var(--white); border: none; padding: 1.2rem;">
+                        <h5>Redefinir Senha</h5>
+                    </button>
+
+                    <div class="link-dois text-center mt-2">
+                        <p class="m-0"><a href="login.php" style="color: var(--main-color);">Voltar ao login</a></p>
+                        <p class="m-0"><a href="../telainicial/index.php" style="color: var(--main-color);">Navegar sem login</a></p>
+                    </div>
+                </form>
+            </main>
+
+            <?php
         } else {
-            echo 'O token expirou. Solicite um novo link para redefinição.';
+            echo '<div class="alert alert-danger text-center mt-5">O token expirou. Solicite um novo link para redefinição.</div>';
         }
     } else {
-        echo 'Token inválido.';
+        echo '<div class="alert alert-danger text-center mt-5">Token inválido.</div>';
     }
 
     $stmt->close();
 } else {
-    echo 'Token não encontrado.';
+    echo '<div class="alert alert-danger text-center mt-5">Token não encontrado.</div>';
 }
 
 $conexao->close();
-?>
-<?php
 include "../partials/footer.php";
 ?>
-
