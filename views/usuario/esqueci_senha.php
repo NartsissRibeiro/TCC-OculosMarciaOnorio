@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->bind_param('sss', $token, $expireTime, $email);
             $stmt->execute();
 
-            $resetLink = "https://localhost/TCC-OculosMarciaOnorio/views/usuario/redefinir_senha.php?token=" . $token;
+            $resetLink = "http://localhost/TCC-OculosMarciaOnorio/views/usuario/redefinir_senha.php?token=" . $token;
             $subject = "Recuperação de Senha";
             $body = "Clique no link abaixo para redefinir sua senha: <a href='$resetLink'>$resetLink</a>";
 
