@@ -1,0 +1,3 @@
+<?php
+//são paginas
+?>
