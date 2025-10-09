@@ -97,9 +97,10 @@ $itensResult = $stmtItems->get_result();
                     <?php endwhile; ?>
                 </tbody>
             </table>
-
-            <div class="d-flex justify-content-end mt-3">
-                <a href="../telainicial/index.php" class="btn btn-primary">Continuar Comprando</a>
+            <div class="d-flex justify-content-between mt-3">
+                <a href="../telainicial/index.php" class="btn btn-warning">Continuar Comprando</a>
+        
+                <a href="../pagamento/new.php" class="btn btn-primary">Pagar Agora</a>
             </div>
         </div>
     </div>
