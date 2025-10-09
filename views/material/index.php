@@ -14,7 +14,7 @@ $result = mysqli_query($conexao, $sql);
             <h2>Consulta de Materiais</h2>
         </div>
         <div class="card-body">
-            <table class="table table-striped table-hover text-center align-middle">
+            <table id="dadosTable" class="table table-striped table-hover text-center align-middle">
                 <thead class="table-dark">
                     <tr>
                         <th>ID</th>
@@ -55,5 +55,18 @@ $result = mysqli_query($conexao, $sql);
         </div>
     </div>
 </div>
+<script>
+  $(document).ready(function() {
+    $('#dadosTable').DataTable({
+      pageLength: 10,
+      lengthMenu: [5, 10, 25, 50, 100],
+      ordering: true,
+      searching: true,
+      language: {
+          url: "../../assets/json/pt-BR.json"
+      }
+    });
+  });
+</script>
 
 <?php include "../partials/footer.php"; ?>
