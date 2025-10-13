@@ -2,10 +2,11 @@
 session_start();
 include_once "../../Controller/Session/Session.php";
 include "../../db/conexao.php";
+require_once "../../Controller/MailController.php";
 
 // Verifica login
 if (!SessionController::isLoggedIn()) {
-    die("Você precisa estar logado para finalizar o pedido.");
+    die("<div class='alert alert-danger'>Você precisa estar logado para finalizar o pedido.</div>");
 }
 
 $userId = SessionController::getUserId();
@@ -76,12 +77,7 @@ try {
     $stmt->execute();
     $logradouroId = $conexao->insert_id;
 
-    // --- 5. Pagamento ---
-    //$stmt = $conexao->prepare("INSERT INTO pagamento (tipo_pagamento) VALUES (?)");
-    //$stmt->bind_param("s", $tipoPagamento);
-    //$stmt->execute();
-    //$pagamentoId = $conexao->insert_id;
-
+    // --- 5. Status ---
     $acao = $_POST['acao'] ?? 'pago'; // valor vindo do botão
     $statusId = ($acao === 'nao_pago') ? 2 : 1; // 1 = Não Pago, 2 = Pago
 
@@ -105,6 +101,32 @@ try {
     $stmt->execute();
     $pedidoId = $conexao->insert_id;
 
+    // --- Monta corpo do email ---
+    $body = "<h2>Pedido Confirmado #$pedidoId</h2>";
+    $body .= "<p>Olá! Seu pedido foi registrado com sucesso.</p>";
+    $body .= "<ul>";
+    foreach ($produtos as $id_produto => $quantidade) {
+        $stmtProd = $conexao->prepare("SELECT nome_produto, preco_produto FROM produto WHERE id_produto = ?");
+        $stmtProd->bind_param("i", $id_produto);
+        $stmtProd->execute();
+        $resProd = $stmtProd->get_result()->fetch_assoc();
+        $subtotal = $resProd['preco_produto'] * $quantidade;
+        $body .= "<li>{$resProd['nome_produto']} x $quantidade - R$ " . number_format($subtotal,2,',','.') . "</li>";
+    }
+    $body .= "</ul>";
+    $body .= "<p>Total: R$ " . number_format($total,2,',','.') . "</p>";
+    $body .= "<p>Endereço: $rua, $numero, $bairroNome, $cidadeNome - $estadoNome</p>";
+    if ($mensagem) $body .= "<p>Mensagem: $mensagem</p>";
+
+    // --- Busca email do usuário ---
+    $stmtUser = $conexao->prepare("SELECT email_user FROM usuarios WHERE id_user = ?");
+    $stmtUser->bind_param("i", $userId);
+    $stmtUser->execute();
+    $userEmail = $stmtUser->get_result()->fetch_assoc()['email_user'];
+
+    // --- Envia email ---
+    MailController::sendMail($userEmail, "Confirmação do Pedido #$pedidoId", $body);
+
     // --- 7. Inserir produtos no pedido_item ---
     $stmtItem = $conexao->prepare("INSERT INTO pedido_item (id_pedido, id_produto, quantidade) VALUES (?, ?, ?)");
     foreach ($produtos as $idProduto => $qtd) {
@@ -127,4 +149,5 @@ try {
 } catch (Exception $e) {
     $conexao->rollback();
     echo "<div class='alert alert-danger'>Erro ao finalizar pedido: " . $e->getMessage() . "</div>";
-}
+} 
+?>
