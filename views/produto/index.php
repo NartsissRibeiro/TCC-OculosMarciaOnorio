@@ -12,11 +12,17 @@ $sql = "SELECT p.id_produto, p.nome_produto, p.desc_produto, p.preco_produto, p.
 
 $result = mysqli_query($conexao, $sql);
 ?>
-
 <div class="container mt-5">
     <div class="card shadow">
-           <div class="card-header">
-            <h2>Consulta de Produto</h2>
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h2 class="m-0">Consulta de Produto</h2>
+            <a href="graficoPro.php" class="btn btn-outline-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bar-chart-fill me-1" viewBox="0 0 16 16">
+                    <path d="M1 11h2v5H1v-5zm4-4h2v9H5V7zm4-5h2v14H9V2zm4 8h2v6h-2v-6z"/>
+                </svg>
+                Estatísticas
+            </a>
+        </div>
         <div class="card-body">
             <table id="dadosTable" class="table table-striped table-hover text-center align-middle">
                 <thead class="table-dark">

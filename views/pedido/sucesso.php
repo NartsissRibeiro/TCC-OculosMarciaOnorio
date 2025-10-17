@@ -101,7 +101,7 @@ $itensResult = $stmtItems->get_result();
 
             <div class="d-flex justify-content-between mt-3">
                 <a href="../telainicial/index.php" class="btn btn-warning">Continuar Comprando</a>
-                <a href="../pagamento/new.php" class="btn btn-primary">Pagar Agora</a>
+                <a href="../pagamento/new.php?id_pedido=<?php echo $pedido['id_pedido']; ?>" class="btn btn-primary">Pagar Agora</a>
             </div>
         </div>
     </div>

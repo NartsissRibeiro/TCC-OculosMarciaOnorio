@@ -182,7 +182,7 @@ section {
 }
 
 .menu .box:hover .quantity-input:not(:hover):not(:focus) {
-    color: var(--white); /* força voltar a branco */
+    color: var(--white);
 }
 
 
@@ -293,8 +293,8 @@ input:focus {
 }
 
 .card {
-    padding-top: 30px;
-    display: flex;
+    padding-top: 20px;
+    display: block;
     justify-content: center;
     background-color:#1c1c1c;
     color: #fff;

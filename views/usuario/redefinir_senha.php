@@ -21,15 +21,21 @@ if (isset($_GET['token'])) {
             // Se o token for válido, o usuário pode redefinir a senha
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $novaSenha = trim($_POST['novaSenha']);
-                $novaSenhaHash = password_hash($novaSenha, PASSWORD_DEFAULT);
+                $confirmarSenha = trim($_POST['confirmarSenha']);
 
-                // Atualiza a senha do usuário
-                $stmtUpdate = $conexao->prepare("UPDATE usuarios SET senha_user = ?, reset_token = NULL, reset_token_expire = NULL WHERE id_user = ?");
-                $stmtUpdate->bind_param('si', $novaSenhaHash, $userId);
-                $stmtUpdate->execute();
+                if ($novaSenha === $confirmarSenha) {
+                    $novaSenhaHash = password_hash($novaSenha, PASSWORD_DEFAULT);
 
-                header('Location: index.php?senha=sucesso');
-                exit();
+                    // Atualiza a senha do usuário
+                    $stmtUpdate = $conexao->prepare("UPDATE usuarios SET senha_user = ?, reset_token = NULL, reset_token_expire = NULL WHERE id_user = ?");
+                    $stmtUpdate->bind_param('si', $novaSenhaHash, $userId);
+                    $stmtUpdate->execute();
+
+                    header('Location: index.php?senha=sucesso');
+                    exit();
+                } else {
+                    $erro = "As senhas não coincidem. Tente novamente.";
+                }
             }
             ?>
 
@@ -37,9 +43,18 @@ if (isset($_GET['token'])) {
                 <form method="POST" action="">
                     <h2 class="text-center mb-4" style="font-size: 2.4rem; font-weight: 600; color: var(--main-color);">Redefinição de Senha</h2>
                     
+                    <?php if (!empty($erro)): ?>
+                        <div class="alert alert-danger text-center py-2"><?= $erro ?></div>
+                    <?php endif; ?>
+
                     <div class="mb-2">
                         <label class="form-label text-light" for="novaSenha">Nova Senha</label>
                         <input type="password" name="novaSenha" id="novaSenha" placeholder="Digite sua nova senha" class="form-control bg-dark text-light border-secondary" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label text-light" for="confirmarSenha">Confirmar Senha</label>
+                        <input type="password" name="confirmarSenha" id="confirmarSenha" placeholder="Confirme sua nova senha" class="form-control bg-dark text-light border-secondary" required>
                     </div>
 
                     <button type="submit" class="btn w-100 py-2" style="background-color: var(--main-color); color: var(--white); border: none; padding: 1.2rem;">

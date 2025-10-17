@@ -3,7 +3,6 @@ include '../partials/header.php';
 include '../partials/navbar.php';
 include '../../db/conexao.php';
 
-// Consulta os materiais
 $sql = "SELECT id_material, nome_material FROM material";
 $result = mysqli_query($conexao, $sql);
 ?>

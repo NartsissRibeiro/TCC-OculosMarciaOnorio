@@ -44,6 +44,7 @@ include_once "../../Controller/Session/Session.php";
                                     <th>Mensagem</th>
                                     <th>Produtos</th>
                                     <th>Quantidades</th>
+                                    <th>Ações</th>
                                 </tr>
                             </thead>
                             <tbody>";
@@ -83,6 +84,18 @@ include_once "../../Controller/Session/Session.php";
                         echo "<td>" . htmlspecialchars($pedido['mensagem'] ?? '-') . "</td>";
                         echo "<td class='text-start'>" . $produtosHtml . "</td>";
                         echo "<td class='text-start'>" . $quantidadesHtml . "</td>";
+
+                        // Botão de pagamento se não estiver pago
+                        echo "<td>";
+                        if (strtolower($pedido['tipo_status']) == 'não pago') {
+                            echo "<a href='../pagamento/new.php?id_pedido=" . $pedido['id_pedido'] . "' class='btn btn-success btn-sm'>
+                                    Pagar
+                                  </a>";
+                        } else {
+                            echo "-";
+                        }
+                        echo "</td>";
+
                         echo "</tr>";
                     }
 

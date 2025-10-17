@@ -1,23 +1,5 @@
- <?php if (session_status() == PHP_SESSION_NONE) session_start(); ?>
 <?php include '../partials/header.php'; ?>
 <?php include '../partials/navbar.php'; ?>
-<body>
-<?php if(isset($_SESSION['flash_msg'])): ?>
-<div id="flash-message" class="flash-message">
-    <?= htmlspecialchars($_SESSION['flash_msg']); ?>
-</div>
-<script>
-    setTimeout(() => {
-        const msg = document.getElementById('flash-message');
-        if(msg){
-            msg.style.transition = "opacity 0.5s ease";
-            msg.style.opacity = 0;
-            setTimeout(() => msg.remove(), 500);
-        }
-    }, 3000);
-</script>
-<?php unset($_SESSION['flash_msg']); endif; ?>
-
     <?php include '../partials/navbar.php' ?>
     <div class="home-container">
         <section>

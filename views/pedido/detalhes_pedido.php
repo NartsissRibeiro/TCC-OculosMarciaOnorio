@@ -13,7 +13,6 @@ if (!$pedidoId) {
     die("<div class='alert alert-danger text-center mt-5'>Pedido inválido.</div>");
 }
 
-// --- Busca informações do pedido ---
 $stmt = $conexao->prepare("
     SELECT p.id_pedido, p.data_pedido, p.valor_total, p.complemento, p.mensagem,
            st.tipo_status, u.nome_user, u.email_user,
@@ -37,7 +36,6 @@ if ($result->num_rows === 0) {
 
 $pedido = $result->fetch_assoc();
 
-// --- Busca itens do pedido ---
 $stmtItems = $conexao->prepare("
     SELECT pi.id_produto, pi.quantidade, pr.nome_produto, pr.preco_produto
     FROM pedido_item pi
@@ -62,7 +60,7 @@ $itensResult = $stmtItems->get_result();
                 <span class="badge 
                     <?php 
                         echo ($pedido['tipo_status'] == 'não pago') ? 'bg-warning' :
-                             (($pedido['tipo_status'] == 'Pago') ? 'bg-success' : 'bg-secondary');
+                             (($pedido['tipo_status'] == 'pago') ? 'bg-success' : 'bg-secondary');
                     ?>">
                     <?php echo ucfirst($pedido['tipo_status']); ?>
                 </span>
@@ -116,9 +114,6 @@ $itensResult = $stmtItems->get_result();
             <div class="d-flex justify-content-between mt-4">
                 <a href="index.php" class="btn btn-secondary">
                     <i class="bi bi-arrow-left"></i> Voltar
-                </a>
-                <a href="editar_pedido_admin.php?id_pedido=<?php echo $pedido['id_pedido']; ?>" class="btn btn-warning">
-                    <i class="bi bi-pencil-fill"></i> Editar Status
                 </a>
             </div>
 
