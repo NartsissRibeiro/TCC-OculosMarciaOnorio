@@ -445,3 +445,24 @@ h5 {
     color: inherit;
     cursor: pointer;
 }
+
+
+/* telaproduto */
+.btn-rosa {
+    background: var(--main-color);
+    color: var(--white);
+    padding: 0.8rem 2rem;
+    font-size: 1.3rem;
+    border-radius: var(--radius);
+    display: inline-block;
+    cursor: pointer;
+    transition: var(--transition);
+    border: none; 
+    text-decoration: none;
+}
+
+.btn-rosa:hover {
+    background: transparent; 
+    color: var(--main-color); 
+    border: 0.1rem solid var(--main-color); 
+}
