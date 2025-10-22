@@ -29,7 +29,7 @@ if (isset($_GET['q']) && $_GET['q'] !== '') {
                         <input type="hidden" name="id_produto" value="<?= $row['id_produto'] ?>">
                         <div class="box-content">
                             <img src="../../assets/img/<?= htmlspecialchars($row['imagem_produto']) ?>" 
-                                 alt="<?= htmlspecialchars($row['nome_produto']) ?>" width="250" height="250">
+                                 alt="<?= htmlspecialchars($row['nome_produto']) ?>" width="350" height="250">
                             <h3><?= htmlspecialchars($row['nome_produto']) ?></h3>
                             <div class="price">R$<?= number_format($row['preco_produto'], 2, ',', '.') ?></div>
                             <div class="quantity-selector">

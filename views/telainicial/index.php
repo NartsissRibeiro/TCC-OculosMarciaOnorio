@@ -52,7 +52,7 @@ if (isset($_GET['message']) && !empty($_GET['message'])) {
         <input type="hidden" name="id_produto" value="<?php echo $row['id_produto']; ?>">
         <div class="box-content">
             <img src="../../assets/img/<?php echo htmlspecialchars($row['imagem_produto']); ?>" 
-                 alt="<?php echo htmlspecialchars($row['nome_produto']); ?>" width="250" height="250">
+                 alt="<?php echo htmlspecialchars($row['nome_produto']); ?>" width="350" height="250">
             <h3><?php echo htmlspecialchars($row['nome_produto']); ?></h3>
             <div class="price">R$<?php echo number_format($row['preco_produto'], 2, ',', '.'); ?></div>
             <div class="quantity-selector">

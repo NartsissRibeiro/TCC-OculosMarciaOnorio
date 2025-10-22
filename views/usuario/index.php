@@ -46,7 +46,7 @@ $conexao->close();
   <body>
   <?php include '../partials/navbar.php'; ?>
 
-<main class="primeiro" style="max-width: 500px; margin: 120px auto; padding: 2rem; background-color: #1c1c1c; border-radius: var(--radius); box-shadow: 0 0 15px rgba(255, 192, 203, 0.15); font-size: 1.4rem;">
+<main class="primeiro" style="max-width: 500px; margin: 120px auto; padding: 2rem; background-color: #1c1c1c; border-radius: var(--radius); box-shadow: 0 0 15px #1c1c1c; font-size: 1.4rem;">
   <form method="POST" action="">
    <h2 class="text-center mb-4" style="font-size: 2.4rem; font-weight: 600; color: var(--main-color);">Login</h2>
     <?php if (!empty($loginError)): ?>

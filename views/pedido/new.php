@@ -74,50 +74,50 @@ mysqli_close($conexao);
                 <?php endforeach; ?>
 
                <form id="finalizarForm" action="../../controller/carrinho/pedido.php" method="POST" novalidate>
-                <div class="row g-3">
+                <div class="text-center mb-3">
         
-                    <div class="col-md-4">
+                    <div class="text-start mb-4">
                         <label for="cep" class="form-label">CEP</label>
-                        <input type="text" id="cep" name="cep" class="form-control" placeholder="Ex: 01001-000 ou 01001000" required>
+                        <input type="text" id="cep" name="cep" class="form-control mx-auto"placeholder="Ex: 01001-000 ou 01001000" required>
                     </div>
 
-                    <div class="col-md-8">
+                    <div class="text-start mb-4">
                         <label for="rua" class="form-label">Rua</label>
-                        <input type="text" id="rua" name="rua" class="form-control text-capitalize" readonly required>
+                        <input type="text" id="rua" name="rua" class="form-control mx-auto"  readonly required>
                     </div>
 
-                    <div class="col-md-4">
+                    <div class="text-start mb-4">
                         <label for="bairro" class="form-label">Bairro</label>
-                        <input type="text" id="bairro" name="bairro" class="form-control text-capitalize" readonly required>
+                        <input type="text" id="bairro" name="bairro" class="form-control mx-auto"  readonly required>
                     </div>
 
                     
-                    <div class="col-md-4">
+                    <div class="text-start mb-4">
                         <label for="cidade" class="form-label">Cidade</label>
-                        <input type="text" id="cidade" name="cidade" class="form-control text-capitalize" readonly required>
+                        <input type="text" id="cidade" name="cidade"class="form-control mx-auto"   readonly required>
                     </div>
 
-                    <div class="col-md-4">
+                    <div class="text-start mb-4">
                         <label for="estado" class="form-label">Estado</label>
-                        <input type="text" id="estado" name="estado" class="form-control text-uppercase" readonly required>
+                        <input type="text" id="estado" name="estado" class="form-control mx-auto"  readonly required>
                     </div>
 
-                    <div class="col-md-3">
+                    <div class="text-start mb-4">
                         <label for="numero" class="form-label">Número</label>
-                        <input type="text" id="numero" name="numero" class="form-control" required>
+                        <input type="text" id="numero" name="numero" class="form-control mx-auto"  required>
                     </div>
 
-                    <div class="col-md-9">
+                    <div class="text-start mb-4">
                         <label for="complemento" class="form-label">Complemento</label>
-                        <input type="text" id="complemento" name="complemento" class="form-control text-capitalize" placeholder="Opcional">
+                        <input type="text" id="complemento" name="complemento" class="form-control mx-auto"  placeholder="Opcional">
                     </div>
 
-                    <div class="col-12">
+                    <div class="text-start mb-4">
                         <label for="mensagem" class="form-label">Mensagem (opcional)</label>
                         <textarea id="mensagem" name="mensagem" class="form-control" maxlength="250" rows="2" placeholder="Deixe uma mensagem para o pedido"></textarea>
                     </div>
 
-                    <div class="col-md-6">
+                    <div class="text-start mb-4">
                         <label for="pagamento" class="form-label">Forma de Pagamento</label>
                         <select id="pagamento" name="pagamento" class="form-select" required>
                             <option value="" selected disabled>Selecione</option>
