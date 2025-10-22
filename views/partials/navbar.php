@@ -26,8 +26,8 @@
             <li><a class="dropdown-item" href="../produto/new.php">Produto</a></li>
             <li><a class="dropdown-item" href="../material/new.php">Material</a></li>
             <li><a class="dropdown-item" href="../cor/new.php">Cor</a></li>
-            <li><a class="dropdown-item" href="../fornecedor/new.php">Fornecedor</a></li>
-            <li><a class="dropdown-item" href="../mercadoria/new.php">Mercadoria</a></li>
+            <!--<li><a class="dropdown-item" href="../fornecedor/new.php">Fornecedor</a></li>-->
+            <!--<li><a class="dropdown-item" href="../mercadoria/new.php">Mercadoria</a></li>-->
         </ul>
         </li>
           <li class="nav-item dropdown">
@@ -39,8 +39,8 @@
             <li><a class="dropdown-item" href="../pedido/index.php">Pedido</a></li>
             <li><a class="dropdown-item" href="../material/index.php">Material</a></li>
             <li><a class="dropdown-item" href="../cor/index.php">Cor</a></li>
-            <li><a class="dropdown-item" href="index.php">Fornecedor</a></li>
-            <li><a class="dropdown-item" href="index.php">Mercadoria</a></li>
+            <!--<li><a class="dropdown-item" href="index.php">Fornecedor</a></li>-->
+            <!--<li><a class="dropdown-item" href="index.php">Mercadoria</a></li>-->
             <!--<li><a class="dropdown-item" href="index.php">Venda</a></li> -->
         </ul>
         </li>
