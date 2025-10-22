@@ -19,5 +19,5 @@ suas branchs para que não ocorra outros problemas para fazermos o "Pull request
 
 Sempre quando vc iniciar o projeto, ele estará na Branch Main, sempre deem uma olhada para não errarem.
 
-DICA: caso não saibam para fazer para fazerem os comandos do git e para ver quais branchs estão, é só entrar em um terminal "Git Bash".
+DICA: caso não saibam para fazerem os comandos do git e para ver quais branchs estão, é só entrar em um terminal "Git Bash".
 

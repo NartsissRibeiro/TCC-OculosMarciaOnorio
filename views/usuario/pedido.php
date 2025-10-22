@@ -17,10 +17,10 @@ include_once "../../Controller/Session/Session.php";
                 $userId = SessionController::getUserId();
 
                 $stmt = $conexao->prepare("
-                    SELECT p.id_pedido, p.data_pedido, p.valor_total, pg.tipo_pagamento,
+                    SELECT p.id_pedido, p.data_pedido, p.valor_total, st.tipo_status,
                            l.logradouro, b.nome_bairro, c.nome_cidade, e.nome_estado, p.complemento, p.mensagem
                     FROM pedido p
-                    INNER JOIN pagamento pg ON p.id_pagamento = pg.id_pagamento
+                    INNER JOIN status st ON p.id_status = st.id_status
                     INNER JOIN logradouro l ON p.id_logradouro = l.id_logradouro
                     INNER JOIN bairro b ON p.id_bairro = b.id_bairro
                     INNER JOIN cidade c ON p.id_cidade = c.id_cidade
@@ -39,11 +39,12 @@ include_once "../../Controller/Session/Session.php";
                                     <th>Pedido ID</th>
                                     <th>Data</th>
                                     <th>Valor Total</th>
-                                    <th>Pagamento</th>
+                                    <th>Status</th>
                                     <th>Endereço</th>
                                     <th>Mensagem</th>
                                     <th>Produtos</th>
                                     <th>Quantidades</th>
+                                    <th>Ações</th>
                                 </tr>
                             </thead>
                             <tbody>";
@@ -78,11 +79,23 @@ include_once "../../Controller/Session/Session.php";
                         echo "<td>" . $pedido['id_pedido'] . "</td>";
                         echo "<td>" . date('d/m/Y H:i:s', strtotime($pedido['data_pedido'])) . "</td>";
                         echo "<td>R$ " . number_format($pedido['valor_total'], 2, ',', '.') . "</td>";
-                        echo "<td>" . htmlspecialchars(ucwords($pedido['tipo_pagamento'])) . "</td>";
+                        echo "<td>" . htmlspecialchars(ucwords($pedido['tipo_status'])) . "</td>";
                         echo "<td>" . $endereco . "</td>";
                         echo "<td>" . htmlspecialchars($pedido['mensagem'] ?? '-') . "</td>";
                         echo "<td class='text-start'>" . $produtosHtml . "</td>";
                         echo "<td class='text-start'>" . $quantidadesHtml . "</td>";
+
+                        // Botão de pagamento se não estiver pago
+                        echo "<td>";
+                        if (strtolower($pedido['tipo_status']) == 'não pago') {
+                            echo "<a href='../pagamento/new.php?id_pedido=" . $pedido['id_pedido'] . "' class='btn btn-success btn-sm'>
+                                    Pagar
+                                  </a>";
+                        } else {
+                            echo "-";
+                        }
+                        echo "</td>";
+
                         echo "</tr>";
                     }
 

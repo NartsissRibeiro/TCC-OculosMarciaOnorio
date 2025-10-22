@@ -40,6 +40,7 @@ $conexao->close();
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Márcia Onorio</title>
+    <link rel="icon" href="../../assets/img/mo_logo.png" type="image/x-icon">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
     <link rel="stylesheet" href="../../assets/css/style.css">
   </head>
@@ -64,7 +65,7 @@ $conexao->close();
     </div>
 
     <div class="link-um d-flex justify-content-between align-items-center">
-      <a href="recuperacao-senha/Redefinirsenha.html" style="color: var(--main-color); text-decoration: none;">Esqueci a senha</a>
+      <a href="esqueci_senha.php" style="color: var(--main-color); text-decoration: none;">Esqueci a senha</a>
     </div>
 
     <button type="submit" class="btn w-100 py-2" 

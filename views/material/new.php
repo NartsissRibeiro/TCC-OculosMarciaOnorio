@@ -18,7 +18,7 @@ include '../partials/navbar.php';
                         <form method="post" action="../../Controller/material/new.php">
                             <div class="mb-3">
                                 <label for="name_material" class="form-label">Nome do material</label>
-                                <input type="text" class="form-control" id="name" name="name_material" placeholder="Digite o nome do material" required>
+                                <input type="text" class="form-control" id="name_material" name="name_material" placeholder="Digite o nome do material" required>
                             </div>
                             <button type="submit" class="btn btn-primary">Cadastrar</button>
                         </form>

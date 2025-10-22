@@ -1,8 +1,8 @@
 <?php
 include "../../db/conexao.php";
 
-$name_produto = $_POST['name'];
-$price_produto = $_POST['price'];
+$name_produto = $_POST['name_produto'];
+$price_produto = $_POST['price_produto'];
 
 
 $target_dir = "../../assets/img/"; 
@@ -37,7 +37,7 @@ $id_material = $_POST['id_material'];
 $id_cor = $_POST['id_cor'];
 
 $comando_sql = "INSERT INTO produto (nome_produto, preco_produto, imagem_produto, estoque_produto, id_material, id_cor) 
-                VALUES ('$name', '$price', '$image_name', '$estoque', '$id_material', '$id_cor')";
+                VALUES ('$name_produto', '$price_produto', '$image_name', '$estoque', '$id_material', '$id_cor')";
 
 if (mysqli_query($conexao, $comando_sql)) {
     header('Location: ../../views/produto/new.php');

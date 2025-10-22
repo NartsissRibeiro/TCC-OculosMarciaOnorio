@@ -1,23 +1,24 @@
-<?php
-include_once "../../Controller/Session/Session.php";
-include "../../db/conexao.php";
+<?php 
+include_once "../../Controller/Session/Session.php"; 
+include "../../db/conexao.php"; 
 
 if (!SessionController::isLoggedIn()) {
     die("Você precisa estar logado para ver esta página.");
 }
 
 $userId = SessionController::getUserId();
-
 $pedidoId = $_GET['id_pedido'] ?? null;
+
 if (!$pedidoId) {
     die("Pedido inválido.");
 }
 
+// --- Busca informações do pedido ---
 $stmt = $conexao->prepare("
     SELECT p.id_pedido, p.data_pedido, p.valor_total, p.complemento, p.mensagem,
-           pg.tipo_pagamento, l.logradouro, b.nome_bairro, c.nome_cidade, e.nome_estado
+           st.tipo_status, l.logradouro, b.nome_bairro, c.nome_cidade, e.nome_estado
     FROM pedido p
-    INNER JOIN pagamento pg ON p.id_pagamento = pg.id_pagamento
+    INNER JOIN status st ON p.id_status = st.id_status
     INNER JOIN logradouro l ON p.id_logradouro = l.id_logradouro
     INNER JOIN bairro b ON p.id_bairro = b.id_bairro
     INNER JOIN cidade c ON p.id_cidade = c.id_cidade
@@ -34,7 +35,7 @@ if ($result->num_rows === 0) {
 
 $pedido = $result->fetch_assoc();
 
-// --- 2. Busca itens do pedido ---
+// --- Busca itens do pedido ---
 $stmtItems = $conexao->prepare("
     SELECT pi.id_produto, pi.quantidade, pr.nome_produto, pr.preco_produto
     FROM pedido_item pi
@@ -59,7 +60,7 @@ $itensResult = $stmtItems->get_result();
                 <strong>Pedido ID:</strong> <?php echo $pedido['id_pedido']; ?><br>
                 <strong>Data:</strong> <?php echo $pedido['data_pedido']; ?><br>
                 <strong>Total:</strong> R$ <?php echo number_format($pedido['valor_total'], 2, ',', '.'); ?><br>
-                <strong>Pagamento:</strong> <?php echo htmlspecialchars($pedido['tipo_pagamento']); ?><br>
+                <strong>Status:</strong> <?php echo htmlspecialchars($pedido['tipo_status']); ?><br>
                 <?php if ($pedido['mensagem']): ?>
                     <strong>Mensagem:</strong> <?php echo htmlspecialchars($pedido['mensagem']); ?><br>
                 <?php endif; ?>
@@ -98,8 +99,9 @@ $itensResult = $stmtItems->get_result();
                 </tbody>
             </table>
 
-            <div class="d-flex justify-content-end mt-3">
-                <a href="../telainicial/index.php" class="btn btn-primary">Continuar Comprando</a>
+            <div class="d-flex justify-content-between mt-3">
+                <a href="../telainicial/index.php" class="btn btn-warning">Continuar Comprando</a>
+                <a href="../pagamento/new.php?id_pedido=<?php echo $pedido['id_pedido']; ?>" class="btn btn-primary">Pagar Agora</a>
             </div>
         </div>
     </div>

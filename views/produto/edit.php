@@ -19,11 +19,9 @@ if (!$result_produto || $result_produto->num_rows == 0) {
 }
 $produto = $result_produto->fetch_assoc();
 
-// Consulta materiais
 $sql_material = "SELECT id_material, nome_material FROM material";
 $result_material = $conexao->query($sql_material);
 
-// Consulta cores
 $sql_cor = "SELECT id_cor, nome_cor FROM cor";
 $result_cor = $conexao->query($sql_cor);
 ?>
@@ -86,7 +84,6 @@ $result_cor = $conexao->query($sql_cor);
                     </form>
 
                     <?php
-                    // Atualização do produto
                     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $id_produto = (int)$_POST['id_produto'];
                         $name_produto = mysqli_real_escape_string($conexao, $_POST['name_produto']);

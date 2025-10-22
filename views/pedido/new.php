@@ -74,50 +74,89 @@ mysqli_close($conexao);
                 <?php endforeach; ?>
 
                <form id="finalizarForm" action="../../controller/carrinho/pedido.php" method="POST" novalidate>
+<<<<<<< HEAD
                 <div class="text-center mb-3">
         
                     <div class="text-start mb-4">
+=======
+                <div class="mt-5">
+        
+                    <div class="mb-4">
+>>>>>>> 7fbf063b0314e4ef7e3f8e62e5945154d518c096
                         <label for="cep" class="form-label">CEP</label>
                         <input type="text" id="cep" name="cep" class="form-control mx-auto"placeholder="Ex: 01001-000 ou 01001000" required>
                     </div>
 
+<<<<<<< HEAD
                     <div class="text-start mb-4">
+=======
+                    <div class="mb-4">
+>>>>>>> 7fbf063b0314e4ef7e3f8e62e5945154d518c096
                         <label for="rua" class="form-label">Rua</label>
                         <input type="text" id="rua" name="rua" class="form-control mx-auto"  readonly required>
                     </div>
 
+<<<<<<< HEAD
                     <div class="text-start mb-4">
+=======
+                    <div class="mb-4">
+>>>>>>> 7fbf063b0314e4ef7e3f8e62e5945154d518c096
                         <label for="bairro" class="form-label">Bairro</label>
                         <input type="text" id="bairro" name="bairro" class="form-control mx-auto"  readonly required>
                     </div>
 
                     
+<<<<<<< HEAD
                     <div class="text-start mb-4">
+=======
+                    <div class="mb-4">
+>>>>>>> 7fbf063b0314e4ef7e3f8e62e5945154d518c096
                         <label for="cidade" class="form-label">Cidade</label>
                         <input type="text" id="cidade" name="cidade"class="form-control mx-auto"   readonly required>
                     </div>
 
+<<<<<<< HEAD
                     <div class="text-start mb-4">
+=======
+                    <div class="mb-4">
+>>>>>>> 7fbf063b0314e4ef7e3f8e62e5945154d518c096
                         <label for="estado" class="form-label">Estado</label>
                         <input type="text" id="estado" name="estado" class="form-control mx-auto"  readonly required>
                     </div>
 
+<<<<<<< HEAD
                     <div class="text-start mb-4">
+=======
+                    <div class="mb-4">
+>>>>>>> 7fbf063b0314e4ef7e3f8e62e5945154d518c096
                         <label for="numero" class="form-label">Número</label>
                         <input type="text" id="numero" name="numero" class="form-control mx-auto"  required>
                     </div>
 
+<<<<<<< HEAD
                     <div class="text-start mb-4">
+=======
+                    <div class="mb-4">
+>>>>>>> 7fbf063b0314e4ef7e3f8e62e5945154d518c096
                         <label for="complemento" class="form-label">Complemento</label>
                         <input type="text" id="complemento" name="complemento" class="form-control mx-auto"  placeholder="Opcional">
                     </div>
 
+<<<<<<< HEAD
                     <div class="text-start mb-4">
                         <label for="mensagem" class="form-label">Mensagem (opcional)</label>
                         <textarea id="mensagem" name="mensagem" class="form-control" maxlength="250" rows="2" placeholder="Deixe uma mensagem para o pedido"></textarea>
                     </div>
 
                     <div class="text-start mb-4">
+=======
+                    <div class="mb-4">
+                        <label for="mensagem" class="form-label">Mensagem (opcional)</label>
+                        <textarea id="mensagem" name="mensagem" class="form-control" maxlength="250" rows="2" placeholder="Deixe uma mensagem para o pedido"></textarea>
+                    </div>
+                    
+                    <!--<div class="col-md-6">
+>>>>>>> 7fbf063b0314e4ef7e3f8e62e5945154d518c096
                         <label for="pagamento" class="form-label">Forma de Pagamento</label>
                         <select id="pagamento" name="pagamento" class="form-select" required>
                             <option value="" selected disabled>Selecione</option>
@@ -126,13 +165,16 @@ mysqli_close($conexao);
                             <option value="pix">Pix</option>
                             <option value="dinheiro">Dinheiro</option>
                         </select>
-                    </div>
+                    </div>-->
 
                     <input type="hidden" name="total" value="<?php echo number_format($total, 2, '.', ''); ?>">
 
                     <div class="col-12 d-flex justify-content-between align-items-center mt-3">
                         <a href="../carrinho/index.php" class="btn btn-secondary">Voltar ao Carrinho</a>
-                        <button type="submit" class="btn btn-success" id="btnEnviar">Confirmar Pedido (R$ <?php echo number_format($total, 2, ',', '.'); ?>)</button>
+                        <button type="submit" name="acao" class="btn btn-success" value="nao_pago" id="btnEnviar">fazer pedido (R$ <?php echo number_format($total, 2, ',', '.'); ?>)</button>
+                        <!--<button type="submit" name="acao" value="nao_pago" class="btn btn-danger">
+                            Finalizar como Não Pago
+                        </button>-->
                     </div>
                 </div>
             </form>
@@ -234,7 +276,7 @@ mysqli_close($conexao);
             { el: cidadeInput, name: 'Cidade' },
             { el: estadoInput, name: 'Estado' },
             { el: document.getElementById('numero'), name: 'Número' },
-            { el: document.getElementById('pagamento'), name: 'Pagamento' }
+            //{ el: document.getElementById('pagamento'), name: 'Pagamento' }
         ];
 
         for (let f of requiredFields) {

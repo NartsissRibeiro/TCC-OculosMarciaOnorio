@@ -10,14 +10,15 @@ include '../partials/navbar.php';
                         <h4>Adicionar Cor</h4>
                     </div>
                     <div class="card-body">
-                        <?php 
+                        <?php
+                            include '../../db/conexao.php';  
                         if(SessionController::IsloggedIn()) {
                             $iduser = SessionController::GetuserId();
                         ?>
                         <form method="post" action="../../Controller/cor/new.php">
                             <div class="mb-3">
                                 <label for="name_cor" class="form-label">Nome da Cor</label>
-                                <input type="text" class="form-control" id="name" name="name_cor" placeholder="Digite o nome da cor" required>
+                                <input type="text" class="form-control" id="name_cor" name="name_cor" placeholder="Digite o nome da cor" required>
                             </div>
                             <button type="submit" class="btn btn-primary">Cadastrar</button>
                         </form>

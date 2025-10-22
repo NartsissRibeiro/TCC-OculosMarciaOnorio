@@ -1,28 +1,9 @@
- <?php if (session_status() == PHP_SESSION_NONE) session_start(); ?>
 <?php include '../partials/header.php'; ?>
 <?php include '../partials/navbar.php'; ?>
-<body>
-<?php if(isset($_SESSION['flash_msg'])): ?>
-<div id="flash-message" class="flash-message">
-    <?= htmlspecialchars($_SESSION['flash_msg']); ?>
-</div>
-<script>
-    setTimeout(() => {
-        const msg = document.getElementById('flash-message');
-        if(msg){
-            msg.style.transition = "opacity 0.5s ease";
-            msg.style.opacity = 0;
-            setTimeout(() => msg.remove(), 500);
-        }
-    }, 3000);
-</script>
-<?php unset($_SESSION['flash_msg']); endif; ?>
-
     <?php include '../partials/navbar.php' ?>
     <div class="home-container">
         <section>
             <div class="content">
-                <!--<img src="../../assets/img/beautiful-african-woman-monochrome-portrait (1).jpg" width="300"> -->
                 <h3>VEJA O MUNDO COM ESTILO DESCUBRA OS ÓCULOS ESCUROS <b>MÁRCIA ONÓRIO</b></h3>
                 <p>Márcia Onório: Enxergando o futuro com estilo e elegância, refletindo sua essência em cada par de óculos.</p>
                 <a href="#menu" class="btn">Escolha o seu Agora</a>
@@ -50,11 +31,14 @@ if (isset($_GET['message']) && !empty($_GET['message'])) {
             <div class="box">
     <form method="POST" action="../../Controller/carrinho/new.php">
         <input type="hidden" name="id_produto" value="<?php echo $row['id_produto']; ?>">
+        <a href="telaproduto.php?id_produto=<?php echo $row['id_produto']; ?>" class="produto-link">
         <div class="box-content">
             <img src="../../assets/img/<?php echo htmlspecialchars($row['imagem_produto']); ?>" 
                  alt="<?php echo htmlspecialchars($row['nome_produto']); ?>" width="350" height="250">
             <h3><?php echo htmlspecialchars($row['nome_produto']); ?></h3>
-            <div class="price">R$<?php echo number_format($row['preco_produto'], 2, ',', '.'); ?></div>
+            <div class="price">R$<?php echo number_format($row['preco_produto'], 2, ',', '.'); ?>
+        </div>
+        </a>
             <div class="quantity-selector">
                 <input type="number" name="quantidade" class="quantity-input" 
        value="0" min="1" max="<?php echo htmlspecialchars($row['estoque_produto']); ?>" 
