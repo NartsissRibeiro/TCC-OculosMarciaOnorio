@@ -25,19 +25,15 @@ if (isset($_GET['q']) && $_GET['q'] !== '') {
         <?php if ($produtos && $produtos->num_rows > 0): ?>
             <?php while ($row = $produtos->fetch_assoc()): ?>
                 <div class="box">
-                    <form method="POST" action="../../Controller/carrinho/new.php">
+                    <form method="POST" action="../../controller/carrinho/new.php">
                         <input type="hidden" name="id_produto" value="<?= $row['id_produto'] ?>">
+                        <a href="../telainicial/telaproduto.php?id_produto=<?php echo $row['id_produto']; ?>" class="produto-link">
                         <div class="box-content">
                             <img src="../../assets/img/<?= htmlspecialchars($row['imagem_produto']) ?>" 
                                  alt="<?= htmlspecialchars($row['nome_produto']) ?>" width="250" height="250">
                             <h3><?= htmlspecialchars($row['nome_produto']) ?></h3>
                             <div class="price">R$<?= number_format($row['preco_produto'], 2, ',', '.') ?></div>
-                            <div class="quantity-selector">
-                                <input type="number" name="quantidade" class="quantity-input" 
-                                       value="0" min="1" max="<?= htmlspecialchars($row['estoque_produto']) ?>" 
-                                       style="width: 60px; text-align: center;">
-                            </div>
-                            <button type="submit" class="btn">Adicionar ao Carrinho</button>
+                        </a>
                         </div>
                     </form>
                 </div>

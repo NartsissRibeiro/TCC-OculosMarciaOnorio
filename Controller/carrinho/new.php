@@ -1,15 +1,21 @@
 <?php
 include '../../db/conexao.php';
-include '../session/session.php';
-session_start();
+require_once '../session/session.php';
+//SessionController::startSession(); // Garante que a sessão está ativa
 
-if (SessionController::isLoggedIn()) {
-    $iduser = SessionController::getUserId();
+// Verifica se os dados foram enviados
+if (isset($_POST['id_produto'], $_POST['nome_produto'], $_POST['preco_produto'], $_POST['quantidade'])) {
 
-    if (isset($_POST['id_produto']) && isset($_POST['quantidade'])) {
-        $idproduto = (int)$_POST['id_produto'];
-        $quantidade = (int)$_POST['quantidade'];
+    $idproduto = (int)$_POST['id_produto'];
+    $nomeproduto = $_POST['nome_produto'];
+    $precoproduto = (float)$_POST['preco_produto'];
+    $quantidade = (int)$_POST['quantidade'];
 
+    // --- Usuário logado → salva no banco ---
+    if (SessionController::isLoggedIn()) {
+        $iduser = SessionController::getUserId();
+
+        // Verifica se o produto já está no carrinho do usuário
         $sqlCheck = "SELECT qtd_carrinho FROM carrinho WHERE id_user = ? AND id_produto = ?";
         $stmtCheck = $conexao->prepare($sqlCheck);
         $stmtCheck->bind_param("ii", $iduser, $idproduto);
@@ -34,17 +40,36 @@ if (SessionController::isLoggedIn()) {
         }
 
         $stmtCheck->close();
+        $conexao->close();
         header('Location: ../../views/carrinho/index.php');
         exit();
+
     } else {
-        echo "<div class='alert alert-warning'>Dados de produto ou quantidade não recebidos.</div>";
-        var_dump($_POST);
-    }
-} else {
-    $message = "Você precisa estar logado para adicionar itens ao carrinho.";
-    header('Location: ../../views/telainicial/index.php?message=' . urlencode($message) . '#menu');
-    exit();
+       // --- Usuário NÃO logado → salva na sessão ---
+if (!isset($_SESSION['carrinho']) || !is_array($_SESSION['carrinho'])) {
+    $_SESSION['carrinho'] = [];
 }
 
-$conexao->close();
+// Se o produto já existir no carrinho como array, soma a quantidade
+if (isset($_SESSION['carrinho'][$idproduto]) && is_array($_SESSION['carrinho'][$idproduto])) {
+    $_SESSION['carrinho'][$idproduto]['quantidade'] += $quantidade;
+} else {
+    // Caso seja scalar ou não exista, substitui por array completo
+    $_SESSION['carrinho'][$idproduto] = [
+        'nome' => $nomeproduto,
+        'preco' => $precoproduto,
+        'quantidade' => $quantidade
+    ];
+}
+
+
+        $conexao->close();
+        //$message = "Produto adicionado ao carrinho!";
+        header('Location: ../../views/carrinho/index.php');
+        exit();
+    }
+
+} else {
+    echo "<div class='alert alert-warning'>Dados de produto ou quantidade não recebidos.</div>";
+}
 ?>

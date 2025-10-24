@@ -2,9 +2,11 @@
 include "../partials/header.php";
 include "../partials/navbar.php";
 include "../../db/conexao.php";
+require_once '../../controller/session/session.php';
 
 if (!SessionController::isLoggedIn()) {
-    echo "<div class='alert alert-danger'>Você precisa fazer login para finalizar o pedido. <a href='../usuario/index.php' class='btn btn-sm btn-warning ms-2'>Fazer Login</a></div>";
+    //echo "<div class='alert alert-danger'>Você precisa fazer login para finalizar o pedido. <a href='../usuario/index.php' class='btn btn-sm btn-danger ms-2'>Fazer Login</a></div>";
+    header ('Location: ../usuario/index.php');
     include "../partials/footer.php";
     exit;
 }

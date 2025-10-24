@@ -125,7 +125,7 @@ section {
 
 .menu .box-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(28rem, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(24rem, 1fr));
     gap: 2rem;
 }
 
@@ -176,10 +176,21 @@ section {
     transition: color 0.3s ease;
 }
 
-.quantity-input:hover,
-.quantity-input:focus {
-    color: #000;
+.menu .box h3 {
+    min-height: 3.5em;
+    max-height: 3.5em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
 }
+
+.menu .box .price {
+    font-weight: normal; 
+    color: #fff; 
+    margin-top: 0.5em;
+}
+
 
 .menu .box:hover .quantity-input:not(:hover):not(:focus) {
     color: var(--white);

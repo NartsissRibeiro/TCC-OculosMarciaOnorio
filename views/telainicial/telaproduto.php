@@ -35,22 +35,25 @@ if ($row = $result->fetch_assoc()) {
             </div>
         </div>
         
-        <div class="col-md-6">
-            <h2 class="text-white"><?php echo htmlspecialchars($row['nome_produto']); ?></h2>
-            <p class="text-muted">Código do produto: <?php echo htmlspecialchars($row['id_produto']); ?></p>
-            <p class="h4 text-primary">R$ <?php echo number_format($row['preco_produto'], 2, ',', '.'); ?></p>
-            <p class="text-white"><?php echo htmlspecialchars($row['desc_produto']); ?></p>
+<div class="col-md-6">
+    <h2 class="text-white"><?php echo htmlspecialchars($row['nome_produto']); ?></h2>
+    <p class="text-white">Código do produto: <?php echo htmlspecialchars($row['id_produto']); ?></p>
+    <p class="h2 text-white">R$ <?php echo number_format($row['preco_produto'], 2, ',', '.'); ?></p> <!-- preço maior e branco -->
+    <p class="text-white"><?php echo htmlspecialchars($row['desc_produto']); ?></p>
 
-            <form method="POST" action="../../Controller/carrinho/new.php" class="mt-3">
-                <input type="hidden" name="id_produto" value="<?php echo $row['id_produto']; ?>">
-                <div class="quantity-selector mb-3">
-                    <input type="number" name="quantidade" class="quantity-input" value="1" min="1" max="<?php echo $row['estoque_produto']; ?>" style="width: 80px; text-align: center;">
-                </div>
-                <button type="submit" class="btn-rosa btn-lg w-100">
-                    <i class="bi bi-cart-fill me-2"></i>Adicionar ao Carrinho
-                </button>
-            </form>
+    <form method="POST" action="../../Controller/carrinho/new.php" class="mt-3">
+        <input type="hidden" name="id_produto" value="<?php echo $row['id_produto']; ?>">
+        <input type="hidden" name="nome_produto" value="<?php echo htmlspecialchars($row['nome_produto']); ?>">
+        <input type="hidden" name="preco_produto" value="<?php echo htmlspecialchars($row['preco_produto']); ?>">
+        <div class="quantity-selector mb-3">
+            <input type="number" name="quantidade" class="quantity-input" value="1" min="1" max="<?php echo $row['estoque_produto']; ?>" style="width: 80px; text-align: center;">
         </div>
+        <button type="submit" class="btn-rosa btn-lg w-100 mb-2">
+            <i class="bi bi-cart-fill me-2"></i>Adicionar ao Carrinho
+        </button>
+    </form>
+</div>
+
     </div>
 
 </main>
