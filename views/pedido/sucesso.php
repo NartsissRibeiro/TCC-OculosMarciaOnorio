@@ -58,7 +58,7 @@ $itensResult = $stmtItems->get_result();
         <div class="card-body">
             <div class="alert alert-success">
                 <strong>Pedido ID:</strong> <?php echo $pedido['id_pedido']; ?><br>
-                <strong>Data:</strong> <?php echo $pedido['data_pedido']; ?><br>
+                <strong>Data:</strong> <?php echo date('d/m/Y H:i', strtotime($pedido['data_pedido'])); ?><br>
                 <strong>Total:</strong> R$ <?php echo number_format($pedido['valor_total'], 2, ',', '.'); ?><br>
                 <strong>Status:</strong> <?php echo htmlspecialchars($pedido['tipo_status']); ?><br>
                 <?php if ($pedido['mensagem']): ?>

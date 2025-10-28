@@ -10,7 +10,7 @@ $comando_sql = "INSERT INTO material (nome_material)
                 VALUES ('$name_material')";
 
 if (mysqli_query($conexao, $comando_sql)) {
-    header('Location: ../../views/material/new.php');
+    header('Location: ../../views/material/index.php');
 } else {
     echo "Error: " . $comando_sql . "<br>" . mysqli_error($conexao);
 }

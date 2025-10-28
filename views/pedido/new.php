@@ -45,13 +45,12 @@ while ($row = mysqli_fetch_assoc($result)) {
 mysqli_close($conexao);
 ?>
 
-<div class="container mt-5">
+<div class="container finalizar-container">
     <div class="card">
         <div class="card-header text-center">
             <h2>Finalizar Pedido</h2>
         </div>
         <div class="card-body">
-
             <h5>Produtos no Pedido:</h5>
             <ul class="list-group mb-3">
                 <?php foreach ($produtosCarrinho as $item): ?>
@@ -62,47 +61,49 @@ mysqli_close($conexao);
                     </li>
                 <?php endforeach; ?>
             </ul>
-
             <h4>Total: R$ <?php echo number_format($total, 2, ',', '.'); ?></h4>
 
-            <!-- Formulário de entrega -->
-            <form id="finalizarForm" action="../../controller/carrinho/pedido.php" method="POST" novalidate>
+            <form id="finalizarForm" class="form-finalizar" action="../../controller/carrinho/pedido.php" method="POST" novalidate>
                 <input type="hidden" name="total" value="<?php echo number_format($total, 2, '.', ''); ?>">
 
                 <?php 
-                // Envia também os IDs e quantidades dos produtos
                 foreach ($produtosCarrinho as $item): ?>
                     <input type="hidden" name="produtos[<?php echo $item['id_produto']; ?>]" value="<?php echo $item['qtd_carrinho']; ?>">
                 <?php endforeach; ?>
 
-               <form id="finalizarForm" action="../../controller/carrinho/pedido.php" method="POST" novalidate>
+               <form id="finalizarForm" class="form-finalizar" action="../../controller/carrinho/pedido.php" method="POST" novalidate>
                 <div class="mt-5">
         
+                <div id="msgPlaceholder" class="mt-3"></div>
+                
                     <div class="mb-4">
                         <label for="cep" class="form-label">CEP</label>
                         <input type="text" id="cep" name="cep" class="form-control" placeholder="Ex: 01001-000 ou 01001000" required>
                     </div>
 
-                    <div class="mb-4">
+                <div class="row">
+                    <div class="col-md-6 mb-4">
                         <label for="rua" class="form-label">Rua</label>
                         <input type="text" id="rua" name="rua" class="form-control text-capitalize" readonly required>
                     </div>
 
-                    <div class="mb-4">
+                    <div class="col-md-6 mb-4">
                         <label for="bairro" class="form-label">Bairro</label>
                         <input type="text" id="bairro" name="bairro" class="form-control text-capitalize" readonly required>
                     </div>
-
-                    
-                    <div class="mb-4">
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6 mb-4">
                         <label for="cidade" class="form-label">Cidade</label>
                         <input type="text" id="cidade" name="cidade" class="form-control text-capitalize" readonly required>
                     </div>
 
-                    <div class="mb-4">
+                    <div class="col-md-6 mb-4">
                         <label for="estado" class="form-label">Estado</label>
                         <input type="text" id="estado" name="estado" class="form-control text-uppercase" readonly required>
                     </div>
+                </div>
 
                     <div class="mb-4">
                         <label for="numero" class="form-label">Número</label>
@@ -142,14 +143,12 @@ mysqli_close($conexao);
                 </div>
             </form>
 
-            <div id="msgPlaceholder" class="mt-3"></div>
         </div>
     </div>
 </div>
 
 <?php include "../partials/footer.php"; ?>
 
-<!-- JavaScript: consulta ViaCEP e preenche os campos -->
 <script>
 (function () {
     const cepInput = document.getElementById('cep');
@@ -160,19 +159,15 @@ mysqli_close($conexao);
     const form = document.getElementById('finalizarForm');
     const msgPlaceholder = document.getElementById('msgPlaceholder');
 
-    // Normaliza CEP (remove não-dígitos)
     function normalizeCep(value) {
         return value.replace(/\D/g, '');
     }
 
-    // Mostra mensagem temporária
     function showMessage(text, type = 'danger') {
         msgPlaceholder.innerHTML = `<div class="alert alert-${type}" role="alert">${text}</div>`;
-        // desaparece depois de 5s
         setTimeout(() => { if (msgPlaceholder) msgPlaceholder.innerHTML = ''; }, 5000);
     }
 
-    // Busca ViaCEP
     async function buscarCep(cep) {
         try {
             const url = `https://viacep.com.br/ws/${cep}/json/`;
@@ -187,7 +182,6 @@ mysqli_close($conexao);
         }
     }
 
-    // Evento: ao sair do campo ou ao digitar 8 dígitos e pressionar Enter
     cepInput.addEventListener('blur', onCepChange);
     cepInput.addEventListener('keydown', function(e) {
         if (e.key === 'Enter') {
@@ -199,26 +193,22 @@ mysqli_close($conexao);
     async function onCepChange() {
         const raw = normalizeCep(cepInput.value);
         if (raw.length !== 8) {
-            // Não limpa automaticamente (apenas alerta)
             showMessage('Digite um CEP válido com 8 dígitos (somente números).', 'warning');
             return;
         }
 
-        // opcional: mostra carregando
         showMessage('Consultando CEP...', 'info');
 
         try {
             const data = await buscarCep(raw);
             if (data.erro) {
                 showMessage('CEP não encontrado.', 'warning');
-                // limpa os campos auto preenchíveis
                 ruaInput.value = '';
                 bairroInput.value = '';
                 cidadeInput.value = '';
                 estadoInput.value = '';
                 return;
             }
-            // Preenche os campos (uso de fallback para string vazia)
             ruaInput.value = data.logradouro || '';
             bairroInput.value = data.bairro || '';
             cidadeInput.value = data.localidade || '';
@@ -228,10 +218,7 @@ mysqli_close($conexao);
             showMessage('Erro ao consultar CEP. Verifique sua conexão.', 'danger');
         }
     }
-
-    // Validação simples no submit: garante campos obrigatórios preenchidos
     form.addEventListener('submit', function (e) {
-        // Se quiser prevenir e validar manualmente, use e.preventDefault() aqui.
         const requiredFields = [
             { el: cepInput, name: 'CEP' },
             { el: ruaInput, name: 'Rua' },
@@ -251,7 +238,6 @@ mysqli_close($conexao);
             }
         }
 
-        // deixa o envio seguir para o seu controller PHP
         return true;
     });
 

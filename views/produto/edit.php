@@ -3,14 +3,12 @@ include '../partials/header.php';
 include '../partials/navbar.php';
 include '../../db/conexao.php';
 
-// Verifica se o ID do produto foi passado
 $id = isset($_GET['id_produto']) ? (int)$_GET['id_produto'] : 0;
 if ($id == 0) {
     echo "<div class='alert alert-danger'>Produto não informado!</div>";
     exit;
 }
 
-// Consulta produto
 $sql_produto = "SELECT * FROM produto WHERE id_produto = $id";
 $result_produto = $conexao->query($sql_produto);
 if (!$result_produto || $result_produto->num_rows == 0) {
@@ -34,19 +32,34 @@ $result_cor = $conexao->query($sql_cor);
                     <h2>Atualização de Produto</h2>
                 </div>
                 <div class="card-body">
-                    <form action="" method="post">
-                        <div class="row mb-3">
+                    <?php if (isset($_GET['erro'])): ?>
+                        <div class="alert alert-danger">Erro ao atualizar: <?= htmlspecialchars($_GET['erro']) ?></div>
+                    <?php endif; ?>
+
+                    <form action="../../controller/produto/edit.php" method="post">
+                        <div class="row">
                             <div class="col-md-6">
-                                <label for="name_produto" class="form-label">Nome: </label>
-                                <input type="text" class="form-control" id="name_produto" name="name_produto" value="<?= htmlspecialchars($produto['nome_produto']) ?>" required>
+                                <label for="name_produto" class="form-label">Nome:</label>
+                                <input type="text" class="form-control" id="name_produto" name="name_produto"
+                                    value="<?= htmlspecialchars($produto['nome_produto']) ?>" required>
                             </div>
-                            <div class="col-md-3">
-                                <label for="price_produto" class="form-label">Preço: </label>
-                                <input type="number" class="form-control" id="price_produto" name="price_produto" step="0.01" min="0" max="999" value="<?= $produto['preco_produto'] ?>" required>
+                             <div class="col-md-6">
+                                <label for="desc_produto" class="form-label">Descrição:</label>
+                                <input type="text" class="form-control" id="desc_produto" name="desc_produto"
+                                    value="<?= htmlspecialchars($produto['desc_produto']) ?>" required>
                             </div>
-                            <div class="col-md-3">
-                                <label for="estoque_produto" class="form-label">Estoque: </label>
-                                <input type="number" class="form-control" id="estoque_produto" name="estoque_produto" min="0" max="999" value="<?= $produto['estoque_produto'] ?>" required>
+                        <div class="row">    
+                            <div class="col-md-6">
+                                <label for="price_produto" class="form-label">Preço:</label>
+                                <input type="number" class="form-control" id="price_produto" name="price_produto"
+                                    step="0.01" min="0" max="999"
+                                    value="<?= $produto['preco_produto'] ?>" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="estoque_produto" class="form-label">Estoque:</label>
+                                <input type="number" class="form-control" id="estoque_produto" name="estoque_produto"
+                                    min="0" max="999"
+                                    value="<?= $produto['estoque_produto'] ?>" required>
                             </div>
                         </div>
 
@@ -55,7 +68,7 @@ $result_cor = $conexao->query($sql_cor);
                                 <label for="id_material" class="form-label">Material</label>
                                 <select id="id_material" name="id_material" required class="form-select">
                                     <option value="">Selecione um material</option>
-                                    <?php while ($row = $result_material->fetch_assoc()) : ?>
+                                    <?php while ($row = $result_material->fetch_assoc()): ?>
                                         <option value="<?= $row['id_material'] ?>" <?= ($row['id_material'] == $produto['id_material']) ? 'selected' : '' ?>>
                                             <?= htmlspecialchars($row['nome_material']) ?>
                                         </option>
@@ -66,7 +79,7 @@ $result_cor = $conexao->query($sql_cor);
                                 <label for="id_cor" class="form-label">Cor</label>
                                 <select id="id_cor" name="id_cor" required class="form-select">
                                     <option value="">Selecione uma cor</option>
-                                    <?php while ($row = $result_cor->fetch_assoc()) : ?>
+                                    <?php while ($row = $result_cor->fetch_assoc()): ?>
                                         <option value="<?= $row['id_cor'] ?>" <?= ($row['id_cor'] == $produto['id_cor']) ? 'selected' : '' ?>>
                                             <?= htmlspecialchars($row['nome_cor']) ?>
                                         </option>
@@ -82,31 +95,6 @@ $result_cor = $conexao->query($sql_cor);
                             <button type="reset" class="btn btn-secondary mt-3">Limpar</button>
                         </div>
                     </form>
-
-                    <?php
-                    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                        $id_produto = (int)$_POST['id_produto'];
-                        $name_produto = mysqli_real_escape_string($conexao, $_POST['name_produto']);
-                        $price_produto = (float)$_POST['price_produto'];
-                        $estoque_produto = (int)$_POST['estoque_produto'];
-                        $id_material = (int)$_POST['id_material'];
-                        $id_cor = (int)$_POST['id_cor'];
-
-                        $sql_update = "UPDATE produto SET 
-                            nome_produto='$name_produto',
-                            preco_produto='$price_produto',
-                            estoque_produto='$estoque_produto',
-                            id_material='$id_material',
-                            id_cor='$id_cor'
-                            WHERE id_produto=$id_produto";
-
-                        if ($conexao->query($sql_update)) {
-                            echo "<div class='alert alert-success mt-3'>Produto atualizado com sucesso!</div>";
-                        } else {
-                            echo "<div class='alert alert-danger mt-3'>Erro ao atualizar: " . $conexao->error . "</div>";
-                        }
-                    }
-                    ?>
                 </div>
             </div>
         </div>

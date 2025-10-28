@@ -29,12 +29,19 @@
                                     <input type="text" class="form-control" id="name_produto" name="name_produto" required>
                                 </div>
 
-                                <div class="col-md-3">
+                                    <div class="col-md-6">
+                                    <label for="desc" class="form-label">Descrição: </label>
+                                    <input type="text" class="form-control" id="desc_produto" name="desc_produto" required>
+                                </div>
+                            </div>
+                            
+                            <div class="row">    
+                                <div class="col-md-6">
                                     <label for="price" class="form-label">Preço: </label>
                                     <input type="number" class="form-control" id="price_produto" name="price_produto" step="0.01" min="0" max="999" required>
                                 </div>
 
-                                <div class="col-md-3">
+                                <div class="col-md-6">
                                     <label for="estoque" class="form-label">Estoque: </label>
                                     <input type="number" class="form-control" id="estoque" name="estoque" min="0" max="999" required>
                                 </div>

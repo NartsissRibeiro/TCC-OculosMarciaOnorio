@@ -38,7 +38,7 @@ if ($row = $result->fetch_assoc()) {
 <div class="col-md-6">
     <h2 class="text-white"><?php echo htmlspecialchars($row['nome_produto']); ?></h2>
     <p class="text-white">Código do produto: <?php echo htmlspecialchars($row['id_produto']); ?></p>
-    <p class="h2 text-white">R$ <?php echo number_format($row['preco_produto'], 2, ',', '.'); ?></p> <!-- preço maior e branco -->
+    <p class="h2 text-white">R$ <?php echo number_format($row['preco_produto'], 2, ',', '.'); ?></p>
     <p class="text-white"><?php echo htmlspecialchars($row['desc_produto']); ?></p>
 
     <form method="POST" action="../../Controller/carrinho/new.php" class="mt-3">
