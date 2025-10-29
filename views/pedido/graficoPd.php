@@ -41,7 +41,7 @@ while ($row = $resultVendedoresGastos->fetch_assoc()) {
 .carousel-control-prev, .carousel-control-next { filter: invert(50%); }
 .card { max-width: 1000px; margin: 20px auto; }
 </style>
-
+<div class="container mt-5">
 <div class="card shadow">
     <div class="card-header d-flex justify-content-between align-items-center">
         <h3 class="mb-0">Clientes</h3>
@@ -64,6 +64,7 @@ while ($row = $resultVendedoresGastos->fetch_assoc()) {
             </div>
         </div>
     </div>
+</div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

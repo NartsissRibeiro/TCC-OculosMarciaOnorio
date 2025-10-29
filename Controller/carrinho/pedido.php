@@ -4,16 +4,14 @@ include_once "../../Controller/Session/Session.php";
 include "../../db/conexao.php";
 require_once "../../Controller/MailController.php";
 
-// Verifica login
 if (!SessionController::isLoggedIn()) {
     die("<div class='alert alert-danger'>Você precisa estar logado para finalizar o pedido.</div>");
 }
 
 $userId = SessionController::getUserId();
 
-// Recebe dados do formulário
 $total = $_POST['total'] ?? 0;
-$produtos = $_POST['produtos'] ?? []; // array[id_produto] = quantidade
+$produtos = $_POST['produtos'] ?? [];
 $cep = $_POST['cep'] ?? '';
 $rua = $_POST['rua'] ?? '';
 $bairroNome = $_POST['bairro'] ?? '';
@@ -22,13 +20,10 @@ $estadoNome = $_POST['estado'] ?? '';
 $numero = $_POST['numero'] ?? '';
 $complemento = $_POST['complemento'] ?? null;
 $mensagem = $_POST['mensagem'] ?? null;
-//$tipoPagamento = $_POST['pagamento'] ?? '';
 
-// Inicia transação
 $conexao->begin_transaction();
 
 try {
-    // --- 1. Estado ---
     $stmt = $conexao->prepare("SELECT id_estado FROM estado WHERE nome_estado = ?");
     $stmt->bind_param("s", $estadoNome);
     $stmt->execute();
@@ -42,7 +37,6 @@ try {
         $estadoId = $conexao->insert_id;
     }
 
-    // --- 2. Cidade ---
     $stmt = $conexao->prepare("SELECT id_cidade FROM cidade WHERE nome_cidade = ?");
     $stmt->bind_param("s", $cidadeNome);
     $stmt->execute();
@@ -56,7 +50,6 @@ try {
         $cidadeId = $conexao->insert_id;
     }
 
-    // --- 3. Bairro ---
     $stmt = $conexao->prepare("SELECT id_bairro FROM bairro WHERE nome_bairro = ?");
     $stmt->bind_param("s", $bairroNome);
     $stmt->execute();
@@ -70,18 +63,15 @@ try {
         $bairroId = $conexao->insert_id;
     }
 
-    // --- 4. Logradouro ---
     $logradouroCompleto = $rua . ', ' . $numero;
     $stmt = $conexao->prepare("INSERT INTO logradouro (logradouro, id_tipo) VALUES (?, 1)");
     $stmt->bind_param("s", $logradouroCompleto);
     $stmt->execute();
     $logradouroId = $conexao->insert_id;
 
-    // --- 5. Status ---
-    $acao = $_POST['acao'] ?? 'pago'; // valor vindo do botão
-    $statusId = ($acao === 'nao_pago') ? 2 : 1; // 1 = Não Pago, 2 = Pago
+    $acao = $_POST['acao'] ?? 'pago';
+    $statusId = ($acao === 'nao_pago') ? 2 : 1; 
 
-    // --- 6. Inserir pedido ---
     $stmt = $conexao->prepare("
         INSERT INTO pedido 
         (data_pedido, id_status, id_bairro, complemento, mensagem, valor_total, id_logradouro, id_user, id_cidade)
@@ -101,48 +91,154 @@ try {
     $stmt->execute();
     $pedidoId = $conexao->insert_id;
 
-    // --- Monta corpo do email ---
-    $body = "<h2>Pedido Confirmado #$pedidoId</h2>";
-    $body .= "<p>Olá! Seu pedido foi registrado com sucesso.</p>";
-    $body .= "<ul>";
+    $body = "
+    <!DOCTYPE html>
+    <html lang='pt-BR'>
+    <head>
+    <meta charset='UTF-8'>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .email-container {
+            max-width: 600px;
+            background-color: #fff;
+            margin: 30px auto;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+        .email-header {
+            background-color: #ffb2cbff;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+        .email-header h2 {
+            margin: 0;
+            font-size: 22px;
+        }
+        .email-body {
+            padding: 25px;
+        }
+        .email-body p {
+            margin: 10px 0;
+            font-size: 15px;
+        }
+        .product-list {
+            margin: 20px 0;
+            border-collapse: collapse;
+            width: 100%;
+        }
+        .product-list th, .product-list td {
+            border-bottom: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        .product-list th {
+            background-color: #f0f0f0;
+        }
+        .total {
+            font-size: 18px;
+            font-weight: bold;
+            color: #ffb2cbff;
+            margin-top: 15px;
+        }
+        .footer {
+            background-color: #f0f0f0;
+            text-align: center;
+            padding: 15px;
+            font-size: 13px;
+            color: #666;
+        }
+    </style>
+    </head>
+    <body>
+
+    <div class='email-container'>
+        <div class='email-header'>
+            <h2>Pedido Confirmado #$pedidoId</h2>
+        </div>
+
+        <div class='email-body'>
+            <p>Olá! Seu pedido foi registrado com sucesso.</p>
+            <p>Abaixo estão os detalhes da sua compra:</p>
+
+            <table class='product-list'>
+                <thead>
+                    <tr>
+                        <th>Produto</th>
+                        <th>Qtd</th>
+                        <th>Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>";
+                
     foreach ($produtos as $id_produto => $quantidade) {
         $stmtProd = $conexao->prepare("SELECT nome_produto, preco_produto FROM produto WHERE id_produto = ?");
         $stmtProd->bind_param("i", $id_produto);
         $stmtProd->execute();
         $resProd = $stmtProd->get_result()->fetch_assoc();
         $subtotal = $resProd['preco_produto'] * $quantidade;
-        $body .= "<li>{$resProd['nome_produto']} x $quantidade - R$ " . number_format($subtotal,2,',','.') . "</li>";
-    }
-    $body .= "</ul>";
-    $body .= "<p>Total: R$ " . number_format($total,2,',','.') . "</p>";
-    $body .= "<p>Endereço: $rua, $numero, $bairroNome, $cidadeNome - $estadoNome</p>";
-    if ($mensagem) $body .= "<p>Mensagem: $mensagem</p>";
 
-    // --- Busca email do usuário ---
+        $body .= "
+            <tr>
+                <td>{$resProd['nome_produto']}</td>
+                <td style='text-align:center;'>$quantidade</td>
+                <td>R$ " . number_format($subtotal, 2, ',', '.') . "</td>
+            </tr>";
+    }
+
+    $body .= "
+                </tbody>
+            </table>
+
+            <p class='total'>Total: R$ " . number_format($total, 2, ',', '.') . "</p>
+
+            <p><strong>Endereço de entrega:</strong><br>
+            $rua, $numero, $bairroNome, $cidadeNome - $estadoNome</p>";
+
+    if ($mensagem) {
+        $body .= "<p><strong>Mensagem:</strong> $mensagem</p>";
+    }
+
+    $body .= "
+            <p>Você receberá atualizações sobre seu pedido por e-mail.</p>
+        </div>
+
+        <div class='footer'>
+            <p>Obrigado por comprar conosco!</p>
+            <p>Equipe <strong>OculosMarciaOnorio.com</strong></p>
+        </div>
+    </div>
+
+    </body>
+    </html>
+    ";
+
     $stmtUser = $conexao->prepare("SELECT email_user FROM usuarios WHERE id_user = ?");
     $stmtUser->bind_param("i", $userId);
     $stmtUser->execute();
     $userEmail = $stmtUser->get_result()->fetch_assoc()['email_user'];
 
-    // --- Envia email ---
     MailController::sendMail($userEmail, "Confirmação do Pedido #$pedidoId", $body);
 
-    // --- 7. Inserir produtos no pedido_item ---
     $stmtItem = $conexao->prepare("INSERT INTO pedido_item (id_pedido, id_produto, quantidade) VALUES (?, ?, ?)");
     foreach ($produtos as $idProduto => $qtd) {
         $stmtItem->bind_param("iii", $pedidoId, $idProduto, $qtd);
         $stmtItem->execute();
     }
 
-    // --- 8. Limpar carrinho ---
     $stmt = $conexao->prepare("DELETE FROM carrinho WHERE id_user = ?");
     $stmt->bind_param("i", $userId);
     $stmt->execute();
 
-    // Commit
     $conexao->commit();
 
-    // Redirecionar para página de sucesso
     header("Location: ../../views/pedido/sucesso.php?id_pedido=$pedidoId");
     exit;
 
