@@ -114,7 +114,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $emailContent .= "<p><strong>Mensagem Especial:</strong> " . ucwords(htmlspecialchars($orderData['mensagem'])) . "</p>";
     }
 
-    // Enviar e-mail usando o MailController
     include '../MailController.php'; // Certifique-se de que o caminho está correto
     MailController::sendMail('caua.porciuncula@gmail.com', 'Novo Pedido Recebido', $emailContent);
 

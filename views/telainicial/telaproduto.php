@@ -20,7 +20,11 @@ if ($row = $result->fetch_assoc()) {
                 <div class="carousel-inner">
                     <?php foreach ($imagens as $index => $img) { ?>
                         <div class="carousel-item <?php echo $index === 0 ? 'active' : ''; ?>">
-                            <img src="../../assets/img/<?php echo htmlspecialchars($img); ?>" class="d-block w-100 rounded-3" alt="Imagem do produto">
+                            <div class="easyzoom easyzoom--overlay">
+                            <a href="../../assets/img/<?php echo htmlspecialchars($img); ?>">
+                                <img src="../../assets/img/<?php echo htmlspecialchars($img); ?>" class="d-block w-100 rounded-3" alt="Imagem do produto">
+                            </a>
+                            </div>
                         </div>
                     <?php } ?>
                 </div>
@@ -62,5 +66,6 @@ if ($row = $result->fetch_assoc()) {
 } else {
     echo "<p class='text-center my-5 text-white'>Produto não encontrado.</p>";
 }
+
 include "../partials/footer.php"; 
 ?>

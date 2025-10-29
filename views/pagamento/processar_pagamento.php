@@ -2,7 +2,7 @@
 session_start();
 include "../../db/conexao.php";
 include_once "../../Controller/Session/Session.php";
-require_once "../../Controller/MailController.php"; // <-- para enviar o e-mail
+require_once "../../Controller/MailController.php"; 
 
 if (!SessionController::isLoggedIn()) {
     die("Acesso negado.");
@@ -22,7 +22,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($stmt->execute()) {
 
-        // --- Atualiza estoque dos produtos ---
         $stmtItems = $conexao->prepare("
             SELECT id_produto, quantidade 
             FROM pedido_item 
@@ -45,7 +44,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $stmtItems->close();
 
-        // --- Pega informações do usuário e do pedido ---
         $userId = SessionController::getUserId();
         $stmtUser = $conexao->prepare("SELECT email_user, nome_user FROM usuarios WHERE id_user = ?");
         $stmtUser->bind_param("i", $userId);
@@ -56,7 +54,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $email = $userData['email_user'];
         $nome = $userData['nome_user'];
 
-        // --- Monta corpo do e-mail bonito ---
         $body = "
         <!DOCTYPE html>
         <html lang='pt-BR'>
@@ -120,10 +117,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </html>
         ";
 
-        // --- Envia e-mail ---
         MailController::sendMail($email, "Pagamento Confirmado - Pedido #$id_pedido", $body);
 
-        // --- Mensagem de sucesso na tela ---
         echo "<div class='alert alert-success text-center mt-5'>
                 Pagamento registrado, estoque atualizado e e-mail enviado com sucesso!
               </div>";
