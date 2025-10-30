@@ -13,7 +13,6 @@ if (!$pedidoId) {
     die("Pedido inválido.");
 }
 
-// --- Busca informações do pedido ---
 $stmt = $conexao->prepare("
     SELECT p.id_pedido, p.data_pedido, p.valor_total, p.complemento, p.mensagem,
            st.tipo_status, l.logradouro, b.nome_bairro, c.nome_cidade, e.nome_estado
@@ -35,7 +34,6 @@ if ($result->num_rows === 0) {
 
 $pedido = $result->fetch_assoc();
 
-// --- Busca itens do pedido ---
 $stmtItems = $conexao->prepare("
     SELECT pi.id_produto, pi.quantidade, pr.nome_produto, pr.preco_produto
     FROM pedido_item pi
@@ -101,7 +99,7 @@ $itensResult = $stmtItems->get_result();
 
             <div class="d-flex justify-content-between mt-3">
                 <a href="../telainicial/index.php" class="btn btn-warning">Continuar Comprando</a>
-                <a href="../pagamento/new.php?id_pedido=<?php echo $pedido['id_pedido']; ?>" class="btn btn-primary">Pagar Agora</a>
+                <a href="../pagamento/new.php?id_pedido=<?php echo $pedido['id_pedido']; ?>" class="btn btn-primary">Pagar</a>
             </div>
         </div>
     </div>

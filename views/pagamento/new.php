@@ -14,7 +14,6 @@ if (!$pedidoId) {
     die("<div class='alert alert-danger text-center mt-5'>Pedido inválido.</div>");
 }
 
-// Busca o pedido
 $stmt = $conexao->prepare("SELECT id_pedido, valor_total, id_status, tipo_pagamento FROM pedido WHERE id_pedido=? AND id_user=?");
 $stmt->bind_param("ii", $pedidoId, $userId);
 $stmt->execute();
@@ -26,17 +25,15 @@ if (!$id) {
     die("<div class='alert alert-danger text-center mt-5'>Pedido não encontrado.</div>");
 }
 
-// Mensagem de retorno
 $msg = "";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $tipo_pagamento = $_POST['tipo_pagamento'];
-    $valor = str_replace(',', '.', str_replace('.', '', $_POST['valor'])); // converte para decimal
+    $valor = str_replace(',', '.', str_replace('.', '', $_POST['valor']));
 
     if ($tipo_pagamento_existente) {
         $msg = "<div class='alert alert-info'>Pedido já foi pago com $tipo_pagamento_existente.</div>";
     } else {
-        // Atualiza pedido para 'pago'
         $stmt = $conexao->prepare("
             UPDATE pedido 
             SET tipo_pagamento = ?, id_status = (SELECT id_status FROM status WHERE tipo_status='pago')
@@ -45,7 +42,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bind_param("si", $tipo_pagamento, $pedidoId);
 
         if ($stmt->execute()) {
-            // Atualiza estoque
             $stmtItems = $conexao->prepare("SELECT id_produto, quantidade FROM pedido_item WHERE id_pedido = ?");
             $stmtItems->bind_param("i", $pedidoId);
             $stmtItems->execute();
@@ -78,9 +74,9 @@ include "../partials/navbar.php";
 
 <div class="container mt-5">
     <div class="card shadow" style="max-width:600px; margin:auto; padding:20px;">
-        <h3 class="text-center mb-4">Pagamento do Pedido #<?php echo $pedidoId; ?></h3>
+        <h3 class="text-center mb-4">Opções de pagamento<?php //echo $pedidoId; ?></h3>
 
-        <?php if ($msg) echo $msg; // exibe a mensagem de retorno ?>
+        <?php if ($msg) echo $msg; ?>
 
         <?php if (!$tipo_pagamento_existente): ?>
         <form method="POST">
@@ -99,7 +95,7 @@ include "../partials/navbar.php";
                 <input type="text" name="valor" id="valor" value="<?php echo number_format($valor_total, 2, ',', '.'); ?>" class="form-control" readonly>
             </div>
 
-            <button type="submit" class="btn btn-primary w-100">Pagar Agora</button>
+            <button type="submit" class="btn btn-primary w-100">Pagar</button>
         </form>
         <?php endif; ?>
 

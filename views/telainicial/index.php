@@ -32,7 +32,6 @@
         ?>
             <div class="box">
                 <form method="POST" action="../../controller/carrinho/new.php">
-                    <!-- Campos ocultos necessários para o carrinho -->
                     <input type="hidden" name="id_produto" value="<?php echo $row['id_produto']; ?>">
                     <input type="hidden" name="nome_produto" value="<?php echo htmlspecialchars($row['nome_produto']); ?>">
                     <input type="hidden" name="preco_produto" value="<?php echo $row['preco_produto']; ?>">
@@ -40,7 +39,7 @@
                     <a href="telaproduto.php?id_produto=<?php echo $row['id_produto']; ?>" class="produto-link">
                         <div class="box-content">
                             <img src="../../assets/img/<?php echo htmlspecialchars($row['imagem_produto']); ?>" 
-                                 alt="<?php echo htmlspecialchars($row['nome_produto']); ?>" width="250" height="250">
+                                 alt="<?php echo htmlspecialchars($row['nome_produto']); ?>" width="200" height="200">
                             <h3><?php echo htmlspecialchars($row['nome_produto']); ?></h3>
                             <div class="price">R$<?php echo number_format($row['preco_produto'], 2, ',', '.'); ?></div>
                         </div>
