@@ -1,0 +1,52 @@
+<?php
+require_once '../../db/conexao.php';
+require_once '../sessao/Session.php';
+session_start();
+
+if (!SessionController::isLoggedIn()) {
+    header('Location: ../../views/login.php');
+    exit();
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $senhaAtual = trim($_POST['senhaAtual']);
+    $novaSenha = trim($_POST['novaSenha']);
+    $confirmaSenha = trim($_POST['confirmaSenha']);
+    $userId = SessionController::getUserId();
+
+    if (empty($senhaAtual) || empty($novaSenha) || empty($confirmaSenha)) {
+        header('Location: ../../views/usuarios/perfil.php?error=empty_password_fields');
+        exit();
+    }
+
+    if ($novaSenha !== $confirmaSenha) {
+        header('Location: ../../views/usuarios/perfil.php?error=password_mismatch');
+        exit();
+    }
+
+    $stmt = $conexao->prepare("SELECT senha_user FROM usuarios WHERE id_user = ?");
+    $stmt->bind_param('i', $userId);
+    $stmt->execute();
+    $stmt->bind_result($senhaBanco);
+    $stmt->fetch();
+    $stmt->close();
+
+    if (!password_verify($senhaAtual, $senhaBanco)) {
+        header('Location: ../../views/usuario/perfil.php?error=wrong_password');
+        exit();
+    }
+
+    $novaSenhaHash = password_hash($novaSenha, PASSWORD_DEFAULT);
+
+    $stmt = $conexao->prepare("UPDATE usuarios SET senha_user = ? WHERE id_user = ?");
+    $stmt->bind_param('si', $novaSenhaHash, $userId);
+
+    if ($stmt->execute()) {
+        header('Location: ../../views/usuario/perfil.php?success=password_updated');
+    } else {
+        header('Location: ../../views/usuario/perfil.php?error=update_failed');
+    }
+    $stmt->close();
+} else {
+    header('Location: ../../views/usuario/perfil.php');
+}

@@ -20,7 +20,6 @@ class SessionController {
         self::migrarCarrinhoParaBanco($iduser);
     }
 
-    // Logout do usuário
     public static function logout() {
         self::startSession();
         session_unset();
@@ -90,7 +89,6 @@ class SessionController {
             $stmtCheck->close();
         }
 
-        // Limpa o carrinho da sessão após migrar
         unset($_SESSION['carrinho']);
     }
 }

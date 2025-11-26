@@ -48,7 +48,7 @@
 
         <?php if (SessionController::getUserTipo() === 'cliente'): ?>
            <li class="nav-item"><a class="nav-link" href="../usuario/pedido.php">Meus Pedidos</a></li>
-          <li class="nav-item"><a class="nav-link" href="#perfil">Perfil</a></li>
+          <li class="nav-item"><a class="nav-link" href="../usuario/perfil.php">Perfil</a></li>
           <?php endif; ?>
 
       <?php if (SessionController::isLoggedIn()): ?>
