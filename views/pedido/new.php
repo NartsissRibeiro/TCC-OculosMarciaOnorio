@@ -11,6 +11,57 @@ if (!SessionController::isLoggedIn()) {
     exit;
 }
 $userId = SessionController::getUserId();
+$auto = [
+    'cep' => '',
+    'rua' => '',
+    'numero' => '',
+    'bairro' => '',
+    'cidade' => '',
+    'estado' => '',
+    'complemento' => ''
+];
+
+$stmtAuto = $conexao->prepare("
+    SELECT 
+        l.logradouro,
+        b.nome_bairro,
+        b.cep,
+        c.nome_cidade,
+        e.nome_estado,
+        p.complemento
+    FROM pedido p
+    JOIN bairro b ON p.id_bairro = b.id_bairro
+    JOIN cidade c ON p.id_cidade = c.id_cidade
+    JOIN estado e ON c.id_estado = e.id_estado
+    JOIN logradouro l ON p.id_logradouro = l.id_logradouro
+    WHERE p.id_user = ?
+    ORDER BY p.data_pedido DESC
+    LIMIT 1
+");
+$stmtAuto->bind_param("i", $userId);
+$stmtAuto->execute();
+$resAuto = $stmtAuto->get_result();
+
+if ($resAuto->num_rows > 0) {
+    $end = $resAuto->fetch_assoc();
+
+    $auto['cep'] = $end['cep'] ?? '';
+
+    if (strpos($end['logradouro'], ',') !== false) {
+        list($ruaAuto, $numeroAuto) = explode(',', $end['logradouro'], 2);
+        $auto['rua'] = trim($ruaAuto);
+        $auto['numero'] = trim($numeroAuto);
+    } else {
+        $auto['rua'] = $end['logradouro'];
+        $auto['numero'] = '';
+    }
+
+    $auto['bairro'] = $end['nome_bairro'];
+    $auto['cidade'] = $end['nome_cidade'];
+    $auto['estado'] = $end['nome_estado'];
+    $auto['complemento'] = $end['complemento'];
+}
+
 $stmt = $conexao->prepare("SELECT 
                             cr.id_carrinho, 
                             cr.qtd_carrinho,
@@ -78,41 +129,41 @@ mysqli_close($conexao);
                 
                     <div class="mb-4">
                         <label for="cep" class="form-label">CEP</label>
-                        <input type="text" id="cep" name="cep" class="form-control" placeholder="Ex: 01001-000 ou 01001000" required>
+                        <input type="text" id="cep" name="cep" class="form-control" placeholder="Ex: 01001-000 ou 01001000" required value="<?php echo $auto['cep']; ?>">
                     </div>
 
                 <div class="row">
                     <div class="col-md-6 mb-4">
                         <label for="rua" class="form-label">Rua</label>
-                        <input type="text" id="rua" name="rua" class="form-control text-capitalize" readonly required>
+                        <input type="text" id="rua" name="rua" class="form-control text-capitalize" readonly required value="<?php echo $auto['rua']; ?>">
                     </div>
 
                     <div class="col-md-6 mb-4">
                         <label for="bairro" class="form-label">Bairro</label>
-                        <input type="text" id="bairro" name="bairro" class="form-control text-capitalize" readonly required>
+                        <input type="text" id="bairro" name="bairro" class="form-control text-capitalize" readonly required value="<?php echo $auto['bairro']; ?>">
                     </div>
                 </div>
                 
                 <div class="row">
                     <div class="col-md-6 mb-4">
                         <label for="cidade" class="form-label">Cidade</label>
-                        <input type="text" id="cidade" name="cidade" class="form-control text-capitalize" readonly required>
+                        <input type="text" id="cidade" name="cidade" class="form-control text-capitalize" readonly required value="<?php echo $auto['cidade']; ?>">
                     </div>
 
                     <div class="col-md-6 mb-4">
                         <label for="estado" class="form-label">Estado</label>
-                        <input type="text" id="estado" name="estado" class="form-control text-uppercase" readonly required>
+                        <input type="text" id="estado" name="estado" class="form-control text-uppercase" readonly required value="<?php echo $auto['estado']; ?>">
                     </div>
                 </div>
 
                     <div class="mb-4">
                         <label for="numero" class="form-label">Número</label>
-                        <input type="text" id="numero" name="numero" class="form-control" required>
+                        <input type="text" id="numero" name="numero" class="form-control" required value="<?php echo $auto['numero']; ?>">
                     </div>
 
                     <div class="mb-4">
                         <label for="complemento" class="form-label">Complemento</label>
-                        <input type="text" id="complemento" name="complemento" class="form-control text-capitalize" placeholder="Opcional">
+                        <input type="text" id="complemento" name="complemento" class="form-control text-capitalize" placeholder="Opcional" value="<?php echo $auto['complemento']; ?>">
                     </div>
 
                     <div class="mb-4">
