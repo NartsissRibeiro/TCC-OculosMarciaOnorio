@@ -22,8 +22,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->bind_param('ssi', $nomeUser, $emailUser, $userId);
 
     if ($stmt->execute()) {
-        $_SESSION['user_name'] = $nomeUser;
+        $_SESSION['nome_user'] = $nomeUser;
         $_SESSION['email_user'] = $emailUser;
+
         header('Location: ../../views/usuario/perfil.php?success=profile_updated');
         exit();
     } else {

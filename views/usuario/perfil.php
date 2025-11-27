@@ -2,7 +2,7 @@
 include "../partials/header.php";
 include "../partials/navbar.php";
 require_once "../../db/conexao.php";
-
+date_default_timezone_set('America/Sao_Paulo');
 
 if (!SessionController::isLoggedIn()) {
     header('Location: ../usuario/index.php');
