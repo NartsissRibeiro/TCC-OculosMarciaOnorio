@@ -10,10 +10,10 @@ if (!SessionController::isLoggedIn()) {
 
 $userId = SessionController::getUserId();
 
-$stmt = $conexao->prepare("SELECT email_user FROM usuarios WHERE id_user = ?");
+$stmt = $conexao->prepare("SELECT nome_user, email_user FROM usuarios WHERE id_user = ?");
 $stmt->bind_param('i', $userId);
 $stmt->execute();
-$stmt->bind_result($emailUser);
+$stmt->bind_result($nomeUser, $emailUser);
 $stmt->fetch();
 $stmt->close();
 ?>
@@ -51,4 +51,24 @@ $stmt->close();
                             <input type="text" class="form-control" id="nome" name="nome" 
                                    value="<?php echo htmlspecialchars($nomeUser); ?>" required>
                         </div>
-                   
+
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" 
+                                   value="<?php echo htmlspecialchars($emailUser); ?>" required>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between">
+                            <a href="perfil.php" class="btn btn-secondary">Voltar</a>
+                            <button type="submit" class="btn btn-success">Salvar Alteração</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<?php 
+include "../partials/footer.php"; 
+?>

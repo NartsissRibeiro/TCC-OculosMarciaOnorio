@@ -5,7 +5,7 @@ require_once "../../db/conexao.php";
 
 
 if (!SessionController::isLoggedIn()) {
-    header('Location: ../usuarios/index.php');
+    header('Location: ../usuario/index.php');
     exit();
 }
 
@@ -66,23 +66,24 @@ $stmt->close();
                         <h5 class="card-title mt-4">Alterar Senha</h5>
                         <form action="../../controller/usuario/edit_senha.php" method="POST">
                             <div class="mb-3">
-                                <label for="current_password" class="form-label">Senha Atual</label>
-                                <input type="password" class="form-control" id="current_password" name="current_password" required>
+                                <label for="senhaAtual" class="form-label">Senha Atual</label>
+                                <input type="password" class="form-control" id="senhaAtual" name="senhaAtual" required>
                             </div>
                             <div class="mb-3">
-                                <label for="new_password" class="form-label">Nova Senha</label>
-                                <input type="password" class="form-control" id="new_password" name="new_password" required>
+                                <label for="novaSenha" class="form-label">Nova Senha</label>
+                                <input type="password" class="form-control" id="novaSenha" name="novaSenha" required>
                             </div>
                             <div class="mb-3">
-                                <label for="confirm_password" class="form-label">Confirmar Nova Senha</label>
-                                <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+                                <label for="confirmaSenha" class="form-label">Confirmar Nova Senha</label>
+                                <input type="password" class="form-control" id="confirmaSenha" name="confirmaSenha" required>
                             </div>
                             <button type="submit" class="btn btn-success">Atualizar Senha</button>
                         </form>
                     </div>
                 <div class="card-footer text-muted text-center">
                     Último acesso: <?php echo date('d/m/Y H:i:s'); ?>
-                    <a href="?logout=true" class="btn btn-danger btn-sm float-end">Sair</a>
+                    <a href="../telainicial/index.php" class="btn btn-secondary">Voltar</a>
+                    <a href="?logout=true" class="btn btn-danger">Sair</a>
                 </div>
             </div>
         </div>

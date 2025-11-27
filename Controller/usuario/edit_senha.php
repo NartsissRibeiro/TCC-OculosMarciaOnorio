@@ -1,6 +1,6 @@
 <?php
 require_once '../../db/conexao.php';
-require_once '../sessao/Session.php';
+require_once '../Session/session.php';
 session_start();
 
 if (!SessionController::isLoggedIn()) {
@@ -15,12 +15,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $userId = SessionController::getUserId();
 
     if (empty($senhaAtual) || empty($novaSenha) || empty($confirmaSenha)) {
-        header('Location: ../../views/usuarios/perfil.php?error=empty_password_fields');
+        header('Location: ../../views/usuario/perfil.php?error=empty_password_fields');
         exit();
     }
 
     if ($novaSenha !== $confirmaSenha) {
-        header('Location: ../../views/usuarios/perfil.php?error=password_mismatch');
+        header('Location: ../../views/usuario/perfil.php?error=password_mismatch');
         exit();
     }
 
