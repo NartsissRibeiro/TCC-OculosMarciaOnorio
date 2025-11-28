@@ -17,20 +17,15 @@ if (isset($_SESSION['id_user'])) {
     $valor_total = $_POST['valor_total'];
 
 
-    // Inserir um novo pedido na tabela 'pedido'
     $query = "INSERT INTO pedido (id_user, data_pedido, total_pedido, forma_pagamento, cep, numero, bairro, complemento, rua, mensagem) 
               VALUES (?, NOW(), ?, ?, ?, ?, ?, ?, ?, ?)";
     
-    // Verifique os tipos de dados, ajustando conforme necessário para o banco de dados.
     $stmt = $conn->prepare($query);
     $stmt->bind_param("idsiissss", $id_user, $total, $pagamento, $cep, $numero, $bairro, $complemento, $rua, $mensagem);
     
-    // Execute a query
     if ($stmt->execute()) {
-        // Pegar o ID do pedido recém-criado
         $id_pedido = $stmt->insert_id;
 
-        // Redirecionar para a próxima etapa (finalização dos itens)
         header("Location: finalizar_itens.php?id_pedido=" . $id_pedido);
         exit(); // Não se esqueça do exit() para garantir que o código pare por aqui.
     } else {
@@ -124,7 +119,7 @@ if (isset($_GET['id_pedido'])) {
         }
         echo "</tbody></table>";
 
-        echo "<h5>Data do Pedido: " . date("d/m/Y H:i:s") . "</h5>"; // Exibir a data atual como data do pedido
+        echo "<h5>Data do Pedido: " . date("d/m/Y H:i:s") . "</h5>";
         echo "<h5><strong>Forma de Pagamento: </strong> ". ucwords($forma_pagamento)."</h5>";
         
         // Exibir o total fora do loop
@@ -138,7 +133,7 @@ if (isset($_GET['id_pedido'])) {
                 <a href='../telainicial' class='btn btn-primary'>Voltar à Tela Inicial</a>
               </div>";
 
-        echo "</div></div>"; // Fecha a card
+        echo "</div></div>";
     } else {
         echo "<div class='alert alert-danger' role='alert'>Pedido não encontrado.</div>";
     }

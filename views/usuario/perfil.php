@@ -60,8 +60,9 @@ $stmt->close();
                         <p><strong>Nome:</strong> <?php echo ucfirst(htmlspecialchars($userName)); ?></p>
                         <p><strong>Email:</strong> <?php echo htmlspecialchars($emailUser); ?></p>
                         <p><strong>Tipo de Usuário:</strong> <?php echo ucfirst(htmlspecialchars($userType)); ?></p>
-
+                        
                         <a href="editar_perfil.php" class="btn btn-warning mt-3">Editar Perfil</a>
+                        <a href="editar_endereco.php" class="btn btn-primary mt-3">Editar Endereço</a>
 
                         <h5 class="card-title mt-4">Alterar Senha</h5>
                         <form action="../../controller/usuario/edit_senha.php" method="POST">

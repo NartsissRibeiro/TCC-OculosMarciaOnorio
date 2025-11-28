@@ -4,8 +4,7 @@ include '../../db/conexao.php';
 
 if (isset($_GET['cep']) && preg_match('/^\d{8}$/', $_GET['cep'])) {
     $cep = $_GET['cep'];
-
-    // Consultar a API ViaCEP
+    
     $url = "https://viacep.com.br/ws/{$cep}/json/";
     $response = file_get_contents($url);
     $data = json_decode($response, true);
@@ -15,7 +14,6 @@ if (isset($_GET['cep']) && preg_match('/^\d{8}$/', $_GET['cep'])) {
         $cidade = $data['localidade'] ?? '';
         $uf = $data['uf'] ?? '';
 
-        // Buscar id_cidade
         $sql_cidade = "SELECT id_cidade, nome_cidade FROM cidade WHERE nome_cidade = ? AND uf = ?";
         $stmt_cidade = mysqli_prepare($conexao, $sql_cidade);
         mysqli_stmt_bind_param($stmt_cidade, 'ss', $cidade, $uf);
@@ -24,7 +22,6 @@ if (isset($_GET['cep']) && preg_match('/^\d{8}$/', $_GET['cep'])) {
         $cidade_data = mysqli_fetch_assoc($result_cidade);
         mysqli_stmt_close($stmt_cidade);
 
-        // Buscar id_bairro
         $id_bairro = null;
         $nome_bairro = null;
         if ($bairro && $cidade_data) {
@@ -42,7 +39,6 @@ if (isset($_GET['cep']) && preg_match('/^\d{8}$/', $_GET['cep'])) {
             }
         }
 
-        // Retornar dados em JSON
         echo json_encode([
             'id_cidade' => $cidade_data ? $cidade_data['id_cidade'] : null,
             'nome_cidade' => $cidade_data ? $cidade_data['nome_cidade'] : null,
