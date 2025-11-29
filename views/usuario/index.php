@@ -7,18 +7,15 @@ $loginError = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = trim($_POST['email']);
     $senha = trim($_POST['senha']); 
-    //consulta ao bancod de dados para ver o email
     $stmt = $conexao->prepare('SELECT id_user, nome_user, email_user, telefone_user, senha_user, tipo_user FROM usuarios WHERE email_user = ?');
     $stmt->bind_param('s', $email);
     $stmt->execute();
     $stmt->store_result();
 
-    // verifica se o usuario existe
     if ($stmt->num_rows > 0) {
     $stmt->bind_result($iduser, $name, $email, $telefone, $senhaHash, $tipo);
         $stmt->fetch();
 
-        // verifica se o hash é o mesmo da senha
         if (password_verify($senha, $senhaHash)) {
             SessionController::login($iduser, $name, $email, $tipo);
             header('Location: ../telainicial/index.php');

@@ -41,6 +41,7 @@ include_once "../../Controller/Session/Session.php";
                                     <th>Valor Total</th>
                                     <th>Status</th>
                                     <th>Endereço</th>
+                                    <th>Complemento</th>
                                     <th>Mensagem</th>
                                     <th>Produtos</th>
                                     <th>Quantidades</th>
@@ -48,9 +49,8 @@ include_once "../../Controller/Session/Session.php";
                                 </tr>
                             </thead>
                             <tbody>";
-                    
+
                     while ($pedido = $result->fetch_assoc()) {
-                        // Busca produtos do pedido
                         $stmtItems = $conexao->prepare("
                             SELECT pr.nome_produto, pi.quantidade
                             FROM pedido_item pi
@@ -81,19 +81,21 @@ include_once "../../Controller/Session/Session.php";
                         echo "<td>R$ " . number_format($pedido['valor_total'], 2, ',', '.') . "</td>";
                         echo "<td>" . htmlspecialchars(ucwords($pedido['tipo_status'])) . "</td>";
                         echo "<td>" . $endereco . "</td>";
+                        echo "<td>" . htmlspecialchars($pedido['complemento'] ?? '-') . "</td>";
                         echo "<td>" . htmlspecialchars($pedido['mensagem'] ?? '-') . "</td>";
                         echo "<td class='text-start'>" . $produtosHtml . "</td>";
                         echo "<td class='text-start'>" . $quantidadesHtml . "</td>";
 
-                        // Botão de pagamento se não estiver pago
                         echo "<td>";
                         if (strtolower($pedido['tipo_status']) == 'não pago') {
-                            echo "<a href='../pagamento/new.php?id_pedido=" . $pedido['id_pedido'] . "' class='btn btn-success btn-sm'>
+                            echo "<a href='../pagamento/new.php?id_pedido=" . $pedido['id_pedido'] . "' class='btn btn-success btn-sm me-1'>
                                     Pagar
                                   </a>";
-                        } else {
-                            echo "-";
                         }
+
+                        echo "<a href='editar_endereco.php?idpedido=" . $pedido['id_pedido'] . "' class='btn btn-warning btn-sm'>
+                                Editar
+                              </a>";
                         echo "</td>";
 
                         echo "</tr>";
@@ -102,7 +104,7 @@ include_once "../../Controller/Session/Session.php";
                     echo "</tbody></table>";
                 } else {
                     echo "<div class='alert alert-info text-center' role='alert'>
-                            Você ainda não fez nenhum pedido.
+                            Você ainda não fez nenhum pedido. 
                           </div>";
                 }
 
