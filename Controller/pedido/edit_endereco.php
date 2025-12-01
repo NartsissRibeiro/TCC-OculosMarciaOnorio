@@ -19,7 +19,6 @@ $complemento = $_POST['complemento'] ?? null;
 $conexao->begin_transaction();
 
 try {
-    // Atualizar estado
     $stmt = $conexao->prepare("SELECT id_estado FROM estado WHERE nome_estado = ?");
     $stmt->bind_param("s", $estadoNome);
     $stmt->execute();
@@ -79,7 +78,7 @@ try {
     $stmt->execute();
 
     $conexao->commit();
-    header("Location: ../pedido/finalizar_pedido.php?message=Endereço atualizado com sucesso");
+    header("Location: ../../views/usuario/pedido.php?message=Endereço atualizado com sucesso");
     exit;
 
 } catch (Exception $e) {
