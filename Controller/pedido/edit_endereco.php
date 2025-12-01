@@ -74,7 +74,7 @@ try {
         complemento = ?
         WHERE id_pedido = ? AND id_user = ?
     ");
-    $stmt->bind_param("iiiisi", $bairroId, $cidadeId, $logradouroId, $complemento, $idPedido, $userId);
+    $stmt->bind_param("iiissi", $bairroId, $cidadeId, $logradouroId, $complemento, $idPedido, $userId);
     $stmt->execute();
 
     $conexao->commit();

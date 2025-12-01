@@ -91,11 +91,12 @@ include_once "../../Controller/Session/Session.php";
                             echo "<a href='../pagamento/new.php?id_pedido=" . $pedido['id_pedido'] . "' class='btn btn-success btn-sm me-1'>
                                     Pagar
                                   </a>";
-                        }
-
-                        echo "<a href='editar_endereco.php?idpedido=" . $pedido['id_pedido'] . "' class='btn btn-warning btn-sm'>
+                            
+                            echo "<a href='editar_endereco.php?idpedido=" . $pedido['id_pedido'] . "' class='btn btn-warning btn-sm'>
                                 Editar
                               </a>";
+                        }
+
                         echo "</td>";
 
                         echo "</tr>";
